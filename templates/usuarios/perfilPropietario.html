@@ -1,0 +1,237 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Perfil de Propietario</title>
+
+<link rel="stylesheet" href="{% static 'css/perfilPropietario.css' %}">
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+<div class="navbar-content">
+
+<a href="#" class="logo">
+🐾 Hairy Love
+</a>
+
+<div class="nav-links">
+<a href="{% url 'propietario' %}" class="nav-link">Inicio</a>
+<a href="{% url 'mascotas_adopcion' %}" class="nav-link">Adoptar</a>
+<a href="{% url 'formularioServicios' %}" class="nav-link">Servicios</a>
+</div>
+
+<div class="user-info">
+<div class="user-details">
+
+<div class="user-avatar">
+{{request.user.username|slice:":2"|upper}}
+</div>
+
+<span>{{request.user.username}}</span>
+
+</div>
+
+<a href="{% url 'logout' %}" class="logout-btn">
+Cerrar Sesión
+</a>
+
+</div>
+
+</div>
+</nav>
+
+
+<div class="specialist-container">
+
+<!-- PERFIL -->
+<aside class="profile-card">
+
+<div class="profile-img">
+<img src="{% static 'img/perfil.jpg' %}" style="width:100%;height:100%;object-fit:cover;">
+</div>
+
+<h2 class="profile-name">
+{{request.user.nombre}} {{request.user.apellido}}
+</h2>
+
+<span class="profile-title">
+Propietario de Mascotas
+</span>
+
+<p class="profile-bio">
+Amante de los animales y orgulloso dueño de sus mascotas.
+</p>
+
+<div class="profile-stats">
+
+<div class="stat-item">
+<div class="stat-number">{{ total_adoptadas }}</div>
+<div class="stat-label">Mascotas Adoptadas</div>
+</div>
+
+<div class="stat-item">
+<div class="stat-number">{{ total_adopciones }}</div>
+<div class="stat-label">Solicitudes</div>
+</div>
+
+<div class="stat-item">
+<div class="stat-number">0</div>
+<div class="stat-label">Servicios</div>
+</div>
+
+</div>
+
+<a href="{% url 'editar_perfil' %}" class="btn btn-primary">✏️ Editar Perfil</a>
+
+</aside>
+
+
+<!-- PANEL DERECHO -->
+<main class="dashboard-content">
+
+
+<!-- MASCOTAS ADOPTADAS -->
+<section class="dashboard-section">
+
+<div class="section-header">
+<h3>🐶 Mis Mascotas Adoptadas</h3>
+</div>
+
+{% if mascotas_adoptadas %}
+<div class="mascotas-grid">
+{% for mascota in mascotas_adoptadas %}
+    <div class="mascota-card">
+        <div class="mascota-imagen">
+            {% if mascota.foto_mascota %}
+                <img src="{{ mascota.foto_mascota.url }}" alt="{{ mascota.Nombre_Mascota }}">
+            {% else %}
+                <div class="placeholder">{{ mascota.Especie|first|upper }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="mascota-info">
+            <h4 style="color: #FF6B9D; margin-bottom: 8px;">{{ mascota.Nombre_Mascota }}</h4>
+            <p><strong>Especie:</strong> {{ mascota.Especie }}</p>
+            <p><strong>Raza:</strong> {{ mascota.Raza }}</p>
+            <p><strong>Tamaño:</strong> {{ mascota.Tamaño }}</p>
+            <p><strong>Género:</strong> {{ mascota.Genero }}</p>
+            
+            <!-- Botón para descargar PDF de la adopción -->
+            {% for adopcion in adopciones %}
+                {% if adopcion.idMascota.idMascota == mascota.idMascota and adopcion.Estado == 'Aprobada' %}
+                    <a href="{% url 'descargar_reporte_adopcion' adopcion.idAdopcion %}" class="btn btn-primary" style="margin-top: 10px; display: inline-block; font-size: 0.85rem; width: 100%; text-align: center;">
+                        📄 Descargar PDF
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% else %}
+<p style="color: #999; text-align: center; padding: 30px;">
+    Aún no tienes mascotas adoptadas. <a href="{% url 'mascotas_adopcion_disponibles' %}" style="color: #FF6B9D; text-decoration: underline;">Explora las mascotas disponibles</a>
+</p>
+{% endif %}
+
+</section>
+
+
+<!-- ADOPCIONES -->
+<section class="dashboard-section">
+
+<div class="section-header">
+<h3>❤️ Solicitudes Recientes</h3>
+</div>
+
+<div class="history-list">
+
+{% if adopciones %}
+    {% for adopcion in adopciones %}
+
+    <div class="history-item">
+
+    <div class="history-header">
+
+    <h4>
+    {{ adopcion.idMascota.Nombre_Mascota }}
+    </h4>
+
+    <span class="status-completed">
+    {{ adopcion.Estado }}
+    </span>
+
+    </div>
+
+    <div class="history-details">
+
+    <p>
+    <strong>Especie:</strong>
+    {{ adopcion.idMascota.Especie }}
+    </p>
+
+    <p>
+    <strong>Raza:</strong>
+    {{ adopcion.idMascota.Raza }}
+    </p>
+
+    <p>
+    <strong>Fecha Solicitud:</strong>
+    {{ adopcion.Fecha_Solicitud }}
+    </p>
+
+    </div>
+
+    {% if adopcion.Estado == 'Aprobada' %}
+    <a href="{% url 'descargar_reporte_adopcion' adopcion.idAdopcion %}" class="btn btn-primary" style="margin-top: 10px; display: inline-block; font-size: 0.85rem;">
+    📄 Descargar Reporte PDF
+    </a>
+    {% endif %}
+
+    </div>
+
+    {% endfor %}
+{% else %}
+    <p style="color: #999; text-align: center; padding: 20px;">
+        No hay solicitudes de adopción aún.
+    </p>
+{% endif %}
+
+</div>
+
+</section>
+
+
+
+<!-- SERVICIOS -->
+<section class="dashboard-section">
+
+<div class="section-header">
+<h3>🛎️ Servicios Solicitados</h3>
+</div>
+
+<a href="{% url 'formularioServicios' %}" class="service-btn-compact">
+Solicitar Nuevo Servicio
+</a>
+
+<div class="history-list">
+<p style="color: #999; text-align: center; padding: 20px;">
+    No hay servicios solicitados. <a href="{% url 'formularioServicios' %}" style="color: #FF6B9D; text-decoration: underline;">Solicita un servicio aquí</a>
+</p>
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+</body>
+</html>

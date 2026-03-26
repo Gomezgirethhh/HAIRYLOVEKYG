@@ -1,0 +1,444 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Solicitar Nuevo Servicio - Hairy Love{% endblock %}
+
+{% block content %}
+<style>
+    .servicios-container {
+        max-width: 1000px;
+        margin: 80px auto 40px;
+        padding: 0 20px;
+    }
+    
+    .servicios-header {
+        text-align: center;
+        margin-bottom: 50px;
+        animation: fadeInDown 0.8s ease;
+    }
+    
+    .servicios-header h1 {
+        font-size: 3em;
+        color: #2w3;
+        margin-bottom: 15px;
+        font-weight: 800;
+    }
+    
+    .servicios-header p {
+        font-size: 1.1em;
+        color: #666;
+    }
+    
+    .form-section {
+        background: white;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 0.8s ease;
+        margin-bottom: 40px;
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+        animation: slideInLeft 0.6s ease;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 600;
+        color: #333;
+        font-size: 1em;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1em;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        transition: all 0.3s ease;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #FF6B9D;
+        box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    .form-group textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+    
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .btn-solicitar {
+        background: linear-gradient(135deg, #FF6B9D, #FF8FBC);
+        color: white;
+        padding: 15px 50px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 20px;
+        box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+    }
+    
+    .btn-solicitar:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+    }
+    
+    .btn-solicitar:active {
+        transform: translateY(-1px);
+    }
+    
+    .servicios-lista {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+        margin-bottom: 50px;
+    }
+    
+    .servicio-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 2px solid transparent;
+        animation: slideInUp 0.6s ease;
+    }
+    
+    .servicio-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        border-color: #FF6B9D;
+    }
+    
+    .servicio-card h3 {
+        color: #FF6B9D;
+        margin-bottom: 10px;
+        font-size: 1.3em;
+    }
+    
+    .servicio-precio {
+        font-size: 1.5em;
+        color: #2c3;
+        font-weight: 800;
+        margin: 15px 0;
+    }
+    
+    .servicio-duracion {
+        color: #999;
+        font-size: 0.9em;
+        margin-bottom: 15px;
+    }
+    
+    .servicio-desc {
+        color: #666;
+        font-size: 0.95em;
+        line-height: 1.6;
+    }
+    
+    .info-box {
+        background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(255, 143, 188, 0.1));
+        border-left: 4px solid #FF6B9D;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        animation: slideInLeft 0.6s ease;
+    }
+    
+    .info-box p {
+        margin: 0;
+        color: #555;
+        line-height: 1.6;
+    }
+    
+    .required-field::after {
+        content: " *";
+        color: #FF6B9D;
+        font-weight: bold;
+    }
+    
+    .mensaje-error {
+        color: #e74c3c;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+    
+    .loading-spinner {
+        display: none;
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #FF6B9D;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="servicios-container">
+    <div class="servicios-header">
+        <h1>🛎️ Solicitar Nuevo Servicio</h1>
+        <p>Elige un servicio especializado para tu mascota</p>
+    </div>
+    
+    {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <div class="info-box">
+        <p><strong>ℹ️ ¿Cómo funciona?</strong> Selecciona el servicio que necesitas, elige tu mascota, programa la fecha y hora, y un especialista confirmará tu solicitud. Nos comprometemos a brindarte el mejor servicio para tu compañero peludo.</p>
+    </div>
+    
+    <!-- FORMULARIO PRINCIPAL -->
+    <div class="form-section">
+        <form method="POST" id="formularioServicio">
+            {% csrf_token %}
+            
+            <div style="margin-bottom: 40px;">
+                <h2 style="color: #333; font-size: 1.5em; margin-bottom: 25px;">
+                    ✨ Completa tu solicitud
+                </h2>
+            </div>
+            
+            <!-- Seleccionar Mascota -->
+            <div class="form-group">
+                <label for="mascota" class="required-field">Mascota</label>
+                <select name="mascota" id="mascota" required>
+                    <option value="">-- Selecciona tu mascota --</option>
+                    {% if user.is_authenticated %}
+                        {% for mascota in user.mascotas.all %}
+                            <option value="{{ mascota.idMascota }}">{{ mascota.nombre }} ({{ mascota.especie }})</option>
+                        {% empty %}
+                            <option value=""disabled>No tienes mascotas registradas</option>
+                        {% endfor %}
+                    {% else %}
+                        <option value="" disabled>Debes iniciar sesión para ver tus mascotas</option>
+                    {% endif %}
+                </select>
+            </div>
+            
+            <!-- Tipo de Servicio -->
+            <div class="form-group">
+                <label for="tipo_servicio" class="required-field">Tipo de Servicio</label>
+                <select name="tipo_servicio" id="tipo_servicio" required onchange="actualizarServicios()">
+                    <option value="">-- Selecciona un tipo de servicio --</option>
+                    <option value="Consulta General">Consulta General</option>
+                    <option value="Vacunación">Vacunación</option>
+                    <option value="Esterilización">Esterilización</option>
+                    <option value="Castración">Castración</option>
+                    <option value="Cirugía General">Cirugía General</option>
+                    <option value="Limpieza Dental">Limpieza Dental</option>
+                    <option value="Baño y Aseo">Baño y Aseo</option>
+                    <option value="Corte de Pelo">Corte de Pelo</option>
+                    <option value="Desparasitación">Desparasitación</option>
+                    <option value="Análisis Clínico">Análisis Clínico</option>
+                    <option value="Radiografía">Radiografía</option>
+                    <option value="Ecografía">Ecografía</option>
+                    <option value="Seguimiento Posadopción">Seguimiento Posadopción</option>
+                    <option value="Asesoría Comportamiento">Asesoría Comportamiento</option>
+                </select>
+            </div>
+            
+            <!-- Seleccionar Servicio Específico -->
+            <div class="form-group">
+                <label for="servicio" class="required-field">Servicio Específico</label>
+                <select name="servicio" id="servicio" required>
+                    <option value="">-- Primero selecciona un tipo de servicio --</option>
+                </select>
+            </div>
+            
+            <!-- Fecha y Hora -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fecha_programada" class="required-field">Fecha</label>
+                    <input type="date" name="fecha_programada" id="fecha_programada" required min="{% now 'Y-m-d' %}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="hora_programada" class="required-field">Hora</label>
+                    <input type="time" name="hora_programada" id="hora_programada" required>
+                </div>
+            </div>
+            
+            <!-- Descripción del Problema -->
+            <div class="form-group">
+                <label for="descripcion_problema">Descripción del Problema o Detalles Adicionales</label>
+                <textarea name="descripcion_problema" id="descripcion_problema" placeholder="Cuéntanos más sobre lo que necesita tu mascota..."></textarea>
+            </div>
+            
+            <!-- Botón Enviar -->
+            <button type="submit" class="btn-solicitar" id="btnSolicitar">
+                ✓ Solicitar Servicio
+            </button>
+            
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner"></div>
+                <p style="margin-top: 15px; color: #999;">Procesando solicitud...</p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Datos de ejemplo de servicios (normalmente vendrían del servidor)
+    const serviciosPorTipo = {
+        'Consulta General': [
+            { id: 1, nombre: 'Consulta Veterinaria General', precio: 50, duracion: 30 },
+            { id: 2, nombre: 'Revisión de Salud', precio: 45, duracion: 25 }
+        ],
+        'Vacunación': [
+            { id: 3, nombre: 'Vacunación Básica', precio: 60, duracion: 20 },
+            { id: 4, nombre: 'Vacunación Antirrábica', precio: 40, duracion: 15 }
+        ],
+        'Esterilización': [
+            { id: 5, nombre: 'Esterilización Hembra', precio: 200, duracion: 120 },
+            { id: 6, nombre: 'Esterilización con Análisis', precio: 250, duracion: 150 }
+        ],
+        'Castración': [
+            { id: 7, nombre: 'Castración Macho', precio: 150, duracion: 90 },
+            { id: 8, nombre: 'Castración con Post-Cuidado', precio: 200, duracion: 120 }
+        ],
+        'Limpieza Dental': [
+            { id: 9, nombre: 'Limpieza Dental Profesional', precio: 120, duracion: 60 },
+            { id: 10, nombre: 'Limpieza y Fluorización', precio: 150, duracion: 75 }
+        ],
+        'Baño y Aseo': [
+            { id: 11, nombre: 'Baño Completo', precio: 40, duracion: 45 },
+            { id: 12, nombre: 'Baño + Corte de Uñas', precio: 60, duracion: 60 }
+        ],
+        'Corte de Pelo': [
+            { id: 13, nombre: 'Corte de Mantenimiento', precio: 50, duracion: 60 },
+            { id: 14, nombre: 'Corte Especial/Creativo', precio: 80, duracion: 90 }
+        ]
+    };
+    
+    function actualizarServicios() {
+        const tipoServicio = document.getElementById('tipo_servicio').value;
+        const selectServicio = document.getElementById('servicio');
+        
+        selectServicio.innerHTML = '<option value="">-- Selecciona un servicio --</option>';
+        
+        if (tipoServicio && serviciosPorTipo[tipoServicio]) {
+            serviciosPorTipo[tipoServicio].forEach(servicio => {
+                const option = document.createElement('option');
+                option.value = servicio.id;
+                option.textContent = `${servicio.nombre} - $${servicio.precio}`;
+                selectServicio.appendChild(option);
+            });
+        }
+    }
+    
+    document.getElementById('formularioServicio').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const mascota = document.getElementById('mascota').value;
+        const tipoServicio = document.getElementById('tipo_servicio').value;
+        const servicio = document.getElementById('servicio').value;
+        const fecha = document.getElementById('fecha_programada').value;
+        const hora = document.getElementById('hora_programada').value;
+        const descripcion = document.getElementById('descripcion_problema').value;
+        
+        if (!mascota || !tipoServicio || !servicio || !fecha || !hora) {
+            alert('Por favor completa todos los campos requeridos');
+            return;
+        }
+        
+        // Mostrar spinner
+        document.getElementById('loadingSpinner').style.display = 'block';
+        document.getElementById('btnSolicitar').disabled = true;
+        
+        // Simular envío del formulario
+        setTimeout(() => {
+            alert('✓ ¡Tu solicitud ha sido registrada!\n\nUn especialista se pondrá en contacto contigo pronto para confirmar la fecha y hora.');
+            this.reset();
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('btnSolicitar').disabled = false;
+        }, 1500);
+    });
+</script>
+
+{% endblock %}

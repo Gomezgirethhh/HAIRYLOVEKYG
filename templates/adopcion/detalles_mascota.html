@@ -1,0 +1,342 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ mascota.Nombre_Mascota }} - Hairy Love{% endblock %}
+
+{% block content %}
+<style>
+    .detalle-container {
+        max-width: 1000px;
+        margin: 80px auto 40px;
+        padding: 0 20px;
+    }
+    
+    .detalle-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-bottom: 50px;
+        animation: fadeInUp 0.8s ease;
+    }
+    
+    @media (max-width: 768px) {
+        .detalle-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .mascota-foto {
+        width: 100%;
+        height: 400px;
+        background: linear-gradient(135deg, #FFB6C1, #FF69B4);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 6em;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .mascota-foto img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .mascota-info-completa {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .mascota-titulo {
+        font-size: 2.5em;
+        color: #FF6B9D;
+        margin-bottom: 15px;
+        font-weight: 800;
+    }
+    
+    .mascota-badges {
+        margin-bottom: 20px;
+    }
+    
+    .badge {
+        display: inline-block;
+        background: #FFE6F0;
+        color: #FF6B9D;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        margin-right: 8px;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+    
+    .info-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .info-item label {
+        color: #999;
+        font-size: 0.9em;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    
+    .info-item strong {
+        display: block;
+        color: #333;
+        font-size: 1.1em;
+        margin-top: 5px;
+    }
+    
+    .salud-section {
+        background: #f9f0f6;
+        border-left: 4px solid #FF6B9D;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 25px 0;
+    }
+    
+    .salud-section h3 {
+        color: #FF6B9D;
+        margin-bottom: 15px;
+        font-size: 1.2em;
+    }
+    
+    .salud-item {
+        margin-bottom: 10px;
+        color: #555;
+        line-height: 1.6;
+    }
+    
+    .btn-adoptar {
+        background: linear-gradient(135deg, #FF6B9D, #FF8FBC);
+        color: white;
+        padding: 15px 40px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 30px;
+        box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+    }
+    
+    .btn-adoptar:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+    }
+    
+    .btn-volver {
+        background: #999;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 30px;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-volver:hover {
+        background: #777;
+        transform: translateY(-2px);
+    }
+    
+    .solicitud-existente {
+        background: #fff3cd;
+        border: 2px solid #ffc107;
+        color: #856404;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .descripcion-section {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+    }
+    
+    .descripcion-section h2 {
+        color: #FF6B9D;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+    }
+    
+    .descripcion-section p {
+        color: #555;
+        line-height: 1.8;
+        font-size: 1.05em;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="detalle-container">
+    <a href="{% url 'mascotas_adopcion_disponibles' %}" class="btn-volver">← Volver a Mascotas</a>
+    
+    <div class="detalle-grid">
+        <!-- FOTO -->
+        <div class="mascota-foto">
+            {% if mascota.foto_mascota %}
+                <img src="{{ mascota.foto_mascota.url }}" alt="{{ mascota.Nombre_Mascota }}">
+            {% else %}
+                {{ mascota.Especie|first|upper }}
+            {% endif %}
+        </div>
+        
+        <!-- INFORMACIÓN BÁSICA -->
+        <div class="mascota-info-completa">
+            <h1 class="mascota-titulo">{{ mascota.Nombre_Mascota }}</h1>
+            
+            {% if solicitud_existente %}
+                <div class="solicitud-existente">
+                    ⏳ Ya tienes una solicitud pendiente para esta mascota
+                </div>
+            {% endif %}
+            
+            <div class="mascota-badges">
+                <span class="badge">{{ mascota.Especie }}</span>
+                <span class="badge">{{ mascota.Raza }}</span>
+                <span class="badge">
+                    {% if mascota.Genero == 'Macho' %}🦁{% else %}🐱{% endif %}
+                    {{ mascota.Genero }}
+                </span>
+                <span class="badge">{{ mascota.Tamaño }}</span>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-item">
+                    <label>Edad Aproximada</label>
+                    <strong>
+                        {% with edad=mascota.Fecha_Nacimiento %}
+                            Nacido: {{ mascota.Fecha_Nacimiento|date:"d/m/Y" }}
+                        {% endwith %}
+                    </strong>
+                </div>
+                <div class="info-item">
+                    <label>Peso</label>
+                    <strong>{{ mascota.Peso }} kg</strong>
+                </div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-item">
+                    <label>Estado de Salud</label>
+                    <strong style="color: {% if mascota.Estado_Salud == 'Excelente' %}#27ae60{% elif mascota.Estado_Salud == 'Buena' %}#3498db{% else %}#e74c3c{% endif %}">
+                        {{ mascota.Estado_Salud }}
+                    </strong>
+                </div>
+                <div class="info-item">
+                    <label>Color</label>
+                    <strong>{{ mascota.Color }}</strong>
+                </div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-item">
+                    <label>¿Esterilizado?</label>
+                    <strong>{% if mascota.Esterilizado %}✓ Sí{% else %}✗ No{% endif %}</strong>
+                </div>
+                <div class="info-item">
+                    <label>¿Socializado?</label>
+                    <strong>{% if mascota.Socializado %}✓ Sí{% else %}✗ No{% endif %}</strong>
+                </div>
+            </div>
+            
+            {% if user.is_authenticated and not solicitud_existente %}
+                <a href="{% url 'solicitar_adopcion' mascota.idMascota %}" class="btn-adoptar" style="text-decoration: none; text-align: center; padding: 15px 40px; display: block;">
+                    ❤️ Solicitar Adopción
+                </a>
+            {% elif not user.is_authenticated %}
+                <a href="{% url 'inicio_sesion' %}" class="btn-adoptar" style="text-decoration: none; text-align: center; padding: 15px 40px; display: block;">
+                    ❤️ Inicia sesión para adoptar
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- DESCRIPCIÓN FÍSICA -->
+    {% if mascota.Descripción_Física %}
+        <div class="descripcion-section">
+            <h2>🎨 Descripción Física</h2>
+            <p>{{ mascota.Descripción_Física }}</p>
+        </div>
+    {% endif %}
+    
+    <!-- INFORMACIÓN DE SALUD -->
+    <div class="descripcion-section">
+        <h2>💊 Información de Salud</h2>
+        
+        {% if mascota.Tipo_Alimentación %}
+            <div class="salud-item">
+                <strong>🍖 Tipo de Alimentación:</strong> {{ mascota.Tipo_Alimentación }}
+            </div>
+        {% endif %}
+        
+        {% if mascota.Enfermedades %}
+            <div class="salud-item" style="margin-top: 15px;">
+                <strong>⚠️ Enfermedades o Condiciones:</strong>
+                <p style="margin: 5px 0 0 0;">{{ mascota.Enfermedades }}</p>
+            </div>
+        {% endif %}
+        
+        {% if mascota.Vacunas %}
+            <div class="salud-item" style="margin-top: 15px;">
+                <strong>💉 Registro de Vacunas:</strong>
+                <p style="margin: 5px 0 0 0;">{{ mascota.Vacunas }}</p>
+            </div>
+        {% endif %}
+    </div>
+    
+    <!-- COMPORTAMIENTO Y COMPATIBILIDAD -->
+    {% if mascota.Compatibilidad_Mascota %}
+        <div class="descripcion-section">
+            <h2>🤝 Comportamiento y Compatibilidad</h2>
+            <p>{{ mascota.Compatibilidad_Mascota }}</p>
+        </div>
+    {% endif %}
+    
+    <!-- HISTORIAL -->
+    {% if mascota.Historial_Mascota %}
+        <div class="descripcion-section">
+            <h2>📖 Historial</h2>
+            <p>{{ mascota.Historial_Mascota }}</p>
+        </div>
+    {% endif %}
+    
+    <!-- REQUISITOS DE HOGAR -->
+    {% if mascota.Vivienda %}
+        <div class="descripcion-section">
+            <h2>🏠 Requisitos de Hogar Recomendado</h2>
+            <p>{{ mascota.Vivienda }}</p>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

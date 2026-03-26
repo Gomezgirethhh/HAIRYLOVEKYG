@@ -1,0 +1,384 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Reestablecer Contraseña - Hairy Love{% endblock %}
+
+{% block extra_css %}
+<style>
+    .reset-container {
+        max-width: 500px;
+        margin: 4rem auto;
+        padding: 2rem;
+        background: linear-gradient(135deg, var(--lighter-pink), white);
+        border-radius: 20px;
+        box-shadow: var(--shadow-lg);
+        animation: slideInFromTop 0.6s ease;
+    }
+    
+    .reset-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .reset-header h2 {
+        color: #e83e8c;
+        margin-bottom: 0.5rem;
+    }
+    
+    .reset-header p {
+        color: var(--color-text-light);
+    }
+    
+    .reset-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        animation: bounce-soft 0.8s ease infinite;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #e83e8c;
+    }
+    
+    .form-group input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid rgba(232, 62, 140, 0.2);
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-group input:focus {
+        outline: none;
+        border-color: #e83e8c;
+        box-shadow: 0 0 10px rgba(232, 62, 140, 0.2);
+    }
+    
+    .form-group input:invalid {
+        border-color: #dc3545;
+    }
+    
+    .password-strength {
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+        display: none;
+    }
+    
+    .strength-bar {
+        width: 100%;
+        height: 4px;
+        background: #e0e0e0;
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+    }
+    
+    .strength-fill {
+        height: 100%;
+        width: 0%;
+        transition: all 0.3s ease;
+        background: linear-gradient(90deg, #e83e8c, #a8419f);
+    }
+    
+    .submit-btn {
+        width: 100%;
+        padding: 0.85rem;
+        background: linear-gradient(135deg, #e83e8c, #a8419f);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(232, 62, 140, 0.3);
+    }
+    
+    .submit-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    .reset-body {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin-bottom: 1rem;
+    }
+    
+    .requirements {
+        background: rgba(232, 62, 140, 0.05);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid #e83e8c;
+    }
+    
+    .requirements h4 {
+        color: #e83e8c;
+        margin: 0 0 0.5rem 0;
+        font-size: 0.95rem;
+    }
+    
+    .requirements ul {
+        margin: 0;
+        padding-left: 1.5rem;
+        font-size: 0.85rem;
+    }
+    
+    .requirements li {
+        margin-bottom: 0.3rem;
+        color: var(--color-text);
+    }
+    
+    .requirements li.met {
+        color: #28a745;
+    }
+    
+    .requirements li.met::before {
+        content: "✓ ";
+        font-weight: bold;
+    }
+    
+    .login-link {
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+    
+    .login-link a {
+        color: #e83e8c;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+    
+    .password-visibility {
+        position: relative;
+    }
+    
+    .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #e83e8c;
+        background: none;
+        border: none;
+        font-size: 1.1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="reset-container">
+    <div class="reset-header">
+        <div class="reset-icon">🔒</div>
+        <h2>Nueva Contraseña</h2>
+        <p>Ingresa tu nueva contraseña segura</p>
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" style="margin-bottom: 1rem; animation: slideInFromTop 0.5s ease;">
+                <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="reset-body">
+        <form method="POST" class="reset-form" id="reset_form">
+            {% csrf_token %}
+            
+            <div class="requirements">
+                <h4>Requisitos de Contraseña:</h4>
+                <ul>
+                    <li id="req-length">Al menos 8 caracteres</li>
+                    <li id="req-upper">Una letra mayúscula</li>
+                    <li id="req-lower">Una letra minúscula</li>
+                    <li id="req-number">Un número</li>
+                    <li id="req-special">Un carácter especial (!@#$)</li>
+                </ul>
+            </div>
+            
+            <div class="form-group">
+                <label for="nueva_contrasena">
+                    <i class="fas fa-lock" style="color: #e83e8c; margin-right: 0.5rem;"></i>Nueva Contraseña
+                </label>
+                <div class="password-visibility">
+                    <input type="password" 
+                           id="nueva_contrasena" 
+                           name="nueva_contrasena" 
+                           placeholder="Ingresa tu nueva contraseña" 
+                           required
+                           autocomplete="new-password">
+                    <button type="button" class="toggle-password" onclick="togglePassword('nueva_contrasena')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="password-strength" id="strength" style="display: block; margin-top: 0.5rem;">
+                    <div class="strength-bar">
+                        <div class="strength-fill" id="strength-fill"></div>
+                    </div>
+                    <small id="strength-text">Fortaleza: débil</small>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmar_contrasena">
+                    <i class="fas fa-lock" style="color: #e83e8c; margin-right: 0.5rem;"></i>Confirmar Contraseña
+                </label>
+                <div class="password-visibility">
+                    <input type="password" 
+                           id="confirmar_contrasena" 
+                           name="confirmar_contrasena" 
+                           placeholder="Confirma tu nueva contraseña" 
+                           required
+                           autocomplete="new-password">
+                    <button type="button" class="toggle-password" onclick="togglePassword('confirmar_contrasena')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <span id="match-warning" style="color: #dc3545; display: none; font-size: 0.85rem; margin-top: 0.5rem;">
+                    <i class="fas fa-times-circle"></i> Las contraseñas no coinciden
+                </span>
+            </div>
+            
+            <button type="submit" class="submit-btn" id="submit-btn">
+                <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
+                Reestablecer Contraseña
+            </button>
+        </form>
+    </div>
+    
+    <div class="login-link">
+        <p><a href="{% url 'login' %}">Volver a iniciar sesión</a></p>
+    </div>
+</div>
+
+<script>
+    const newPassword = document.getElementById('nueva_contrasena');
+    const confirmPassword = document.getElementById('confirmar_contrasena');
+    const submitBtn = document.getElementById('submit-btn');
+    const matchWarning = document.getElementById('match-warning');
+    const strengthFill = document.getElementById('strength-fill');
+    const strengthText = document.getElementById('strength-text');
+    
+    // Validar contraseña mientras se escribe
+    newPassword.addEventListener('input', function() {
+        checkPasswordStrength();
+        checkPasswordMatch();
+    });
+    
+    confirmPassword.addEventListener('input', function() {
+        checkPasswordMatch();
+    });
+    
+    function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+        const type = field.type === 'password' ? 'text' : 'password';
+        field.type = type;
+    }
+    
+    function checkPasswordStrength() {
+        const password = newPassword.value;
+        let strength = 0;
+        
+        // Longitud mínima
+        if (password.length >= 8) {
+            document.getElementById('req-length').classList.add('met');
+            strength += 20;
+        } else {
+            document.getElementById('req-length').classList.remove('met');
+        }
+        
+        // Mayúscula
+        if (/[A-Z]/.test(password)) {
+            document.getElementById('req-upper').classList.add('met');
+            strength += 20;
+        } else {
+            document.getElementById('req-upper').classList.remove('met');
+        }
+        
+        // Minúscula
+        if (/[a-z]/.test(password)) {
+            document.getElementById('req-lower').classList.add('met');
+            strength += 20;
+        } else {
+            document.getElementById('req-lower').classList.remove('met');
+        }
+        
+        // Número
+        if (/[0-9]/.test(password)) {
+            document.getElementById('req-number').classList.add('met');
+            strength += 20;
+        } else {
+            document.getElementById('req-number').classList.remove('met');
+        }
+        
+        // Carácter especial
+        if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+            document.getElementById('req-special').classList.add('met');
+            strength += 20;
+        } else {
+            document.getElementById('req-special').classList.remove('met');
+        }
+        
+        // Actualizar barra de fortaleza
+        strengthFill.style.width = strength + '%';
+        
+        if (strength <= 20) {
+            strengthText.textContent = 'Fortaleza: muy débil';
+            strengthFill.style.background = 'linear-gradient(90deg, #dc3545, #c82333)';
+        } else if (strength <= 40) {
+            strengthText.textContent = 'Fortaleza: débil';
+            strengthFill.style.background = 'linear-gradient(90deg, #ffc107, #ff9800)';
+        } else if (strength <= 60) {
+            strengthText.textContent = 'Fortaleza: media';
+            strengthFill.style.background = 'linear-gradient(90deg, #ffc107, #ffc107)';
+        } else if (strength <= 80) {
+            strengthText.textContent = 'Fortaleza: fuerte';
+            strengthFill.style.background = 'linear-gradient(90deg, #28a745, #20c997)';
+        } else {
+            strengthText.textContent = 'Fortaleza: muy fuerte';
+            strengthFill.style.background = 'linear-gradient(90deg, #28a745, #155724)';
+        }
+    }
+    
+    function checkPasswordMatch() {
+        if (confirmPassword.value && newPassword.value !== confirmPassword.value) {
+            matchWarning.style.display = 'block';
+            submitBtn.disabled = true;
+        } else {
+            matchWarning.style.display = 'none';
+            submitBtn.disabled = false;
+        }
+    }
+    
+    // Validar al enviar
+    document.getElementById('reset_form').addEventListener('submit', function(e) {
+        if (newPassword.value !== confirmPassword.value) {
+            e.preventDefault();
+            alert('Las contraseñas no coinciden');
+        }
+    });
+    
+    // Inicializar validación
+    checkPasswordStrength();
+</script>
+{% endblock %}

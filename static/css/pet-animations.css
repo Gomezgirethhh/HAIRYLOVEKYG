@@ -1,0 +1,438 @@
+/* ============================================
+   PET-THEMED ANIMATIONS - Hairy Love
+   Animaciones relacionadas con mascotas
+   ============================================ */
+
+/* 🐾 PATA - Movimiento de pata */
+@keyframes paw-walk {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    25% {
+        transform: translateY(-5px) rotate(-2deg);
+    }
+    50% {
+        transform: translateY(0) rotate(0deg);
+    }
+    75% {
+        transform: translateY(-3px) rotate(2deg);
+    }
+}
+
+.paw-animate {
+    animation: paw-walk 1.5s infinite ease-in-out;
+}
+
+/* ❤️ CORAZÓN - Latido */
+@keyframes heartbeat-pet {
+    0%, 100% {
+        transform: scale(1);
+    }
+    10%, 30% {
+        transform: scale(1.1);
+    }
+    20%, 40%, 60%, 80% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+.heart-beat {
+    animation: heartbeat-pet 1s infinite;
+    color: #e83e8c;
+}
+
+/* 🦴 HUESO - Rotación */
+@keyframes bone-bounce {
+    0%, 100% {
+        transform: rotateZ(-10deg) translateX(0);
+    }
+    25% {
+        transform: rotateZ(-10deg) translateX(5px);
+    }
+    50% {
+        transform: rotateZ(10deg) translateX(0);
+    }
+    75% {
+        transform: rotateZ(10deg) translateX(-5px);
+    }
+}
+
+.bone-bounce {
+    animation: bone-bounce 2s infinite;
+    display: inline-block;
+}
+
+/* 🐱 CABEZA - Movimiento de cabeza */
+@keyframes head-shake {
+    0%, 100% {
+        transform: rotateZ(0deg);
+    }
+    25% {
+        transform: rotateZ(-5deg);
+    }
+    50% {
+        transform: rotateZ(5deg);
+    }
+    75% {
+        transform: rotateZ(-3deg);
+    }
+}
+
+.head-shake {
+    animation: head-shake 1.2s infinite;
+}
+
+/* 👀 OJOS - Parpadeo y brillo */
+@keyframes eye-blink {
+    0%, 49%, 100% {
+        opacity: 1;
+    }
+    50%, 99% {
+        opacity: 0;
+    }
+}
+
+.eye-blink {
+    animation: eye-blink 3s infinite;
+}
+
+@keyframes eye-sparkle {
+    0%, 100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.eye-sparkle {
+    animation: eye-sparkle 1.5s infinite;
+    color: #ffd700;
+    font-size: 0.8em;
+}
+
+/* 🎾 PELOTA - Rebote */
+@keyframes ball-bounce {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(-20px) scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+.ball-bounce {
+    animation: ball-bounce 1s infinite ease-in-out;
+    display: inline-block;
+}
+
+/* 🌈 ARCO ÍRÍ - Degradado que se mueve */
+@keyframes rainbow-shift {
+    0% {
+        filter: hue-rotate(0deg);
+    }
+    100% {
+        filter: hue-rotate(360deg);
+    }
+}
+
+.rainbow-shift {
+    animation: rainbow-shift 3s linear infinite;
+}
+
+/* ✨ SPARKLES - Brillo y destello */
+@keyframes sparkle {
+    0%, 100% {
+        opacity: 0;
+        transform: scale(0) rotate(0deg);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1) rotate(180deg);
+    }
+}
+
+.sparkle {
+    animation: sparkle 1.5s infinite;
+    display: inline-block;
+}
+
+/* 🏃 RUN - Corrida */
+@keyframes run-animation {
+    0%, 100% {
+        transform: translateX(0) scaleX(1);
+    }
+    50% {
+        transform: translateX(20px) scaleX(-1);
+    }
+}
+
+.run-left {
+    animation: run-animation 2s infinite;
+}
+
+/* 🌊 ONDA - Movimiento ondulante */
+@keyframes wave-motion {
+    0%, 100% {
+        transform: translateY(0) rotateZ(0deg);
+    }
+    25% {
+        transform: translateY(-3px) rotateZ(-1deg);
+    }
+    50% {
+        transform: translateY(3px) rotateZ(1deg);
+    }
+    75% {
+        transform: translateY(-3px) rotateZ(-1deg);
+    }
+}
+
+.wave-motion {
+    animation: wave-motion 1.5s infinite ease-in-out;
+}
+
+/* 🎉 CELEBRACIÓN - Saltos y giros */
+@keyframes celebrate {
+    0%, 100% {
+        transform: translateY(0) rotateZ(0deg) scale(1);
+    }
+    25% {
+        transform: translateY(-10px) rotateZ(-5deg) scale(1.05);
+    }
+    50% {
+        transform: translateY(0) rotateZ(5deg) scale(1);
+    }
+    75% {
+        transform: translateY(-5px) rotateZ(-3deg) scale(1.05);
+    }
+}
+
+.celebrate {
+    animation: celebrate 1s infinite;
+}
+
+/* 💤 DORMIR - Respiración suave */
+@keyframes sleep-breath {
+    0%, 100% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.02);
+    }
+}
+
+.sleep-breath {
+    animation: sleep-breath 2s infinite ease-in-out;
+}
+
+/* 🔄 SPIN - Giro circular */
+@keyframes smooth-spin {
+    0% {
+        transform: rotateZ(0deg);
+    }
+    100% {
+        transform: rotateZ(360deg);
+    }
+}
+
+.smooth-spin {
+    animation: smooth-spin 3s linear infinite;
+}
+
+/* 🐾 HUELLA - Rastro de pasos */
+@keyframes paw-print {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1) translateX(50px);
+    }
+}
+
+.paw-trail {
+    animation: paw-print 2s ease-out forwards;
+    position: absolute;
+    color: rgba(232, 62, 140, 0.5);
+}
+
+/* 🎀 RIBBON - Cinta flotante */
+@keyframes ribbon-flutter {
+    0%, 100% {
+        transform: translateY(0) rotateZ(0deg);
+    }
+    25% {
+        transform: translateY(-5px) rotateZ(-5deg);
+    }
+    75% {
+        transform: translateY(5px) rotateZ(5deg);
+    }
+}
+
+.ribbon-flutter {
+    animation: ribbon-flutter 1.5s ease-in-out infinite;
+}
+
+/* 🌸 FLORES - Aparecer */
+@keyframes bloom {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotateZ(180deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotateZ(0deg);
+    }
+}
+
+.bloom {
+    animation: bloom 0.8s ease-out;
+}
+
+/* ==================== MICROINTERACCIONES ==================== */
+
+/* Efecto hover - Mascota feliz */
+.pet-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(232, 62, 140, 0.25);
+}
+
+.pet-card:hover .pet-image {
+    filter: brightness(1.05) saturate(1.1);
+}
+
+.pet-card:hover .heart-icon {
+    animation: heartbeat-pet 0.6s infinite;
+    color: #e83e8c;
+}
+
+/* Botón interactivo */
+.btn-pet-action {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-pet-action::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-pet-action:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Tarjeta de mascota mejorada */
+.mascota-card-enhanced {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.mascota-card-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(232, 62, 140, 0.1) 0%, rgba(168, 65, 159, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mascota-card-enhanced:hover::before {
+    opacity: 1;
+}
+
+/* Loading spinner - Pata */
+.loading-paw {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.loading-paw::after {
+    content: '🐾';
+    position: absolute;
+    font-size: 30px;
+    animation: smooth-spin 2s linear infinite;
+}
+
+/* Badge animado */
+.badge-pet {
+    display: inline-block;
+    background: linear-gradient(135deg, #e83e8c, #a8419f);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(232, 62, 140, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(232, 62, 140, 0);
+    }
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+    /* Reducir animaciones para usuarios con preferencia */
+    .paw-animate,
+    .heart-beat,
+    .bone-bounce,
+    .head-shake,
+    .eye-blink,
+    .ball-bounce,
+    .rainbow-shift,
+    .sparkle,
+    .run-left,
+    .wave-motion,
+    .celebrate,
+    .sleep-breath,
+    .smooth-spin,
+    .ribbon-flutter,
+    .badge-pet {
+        animation: none;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Animaciones más suaves en móvil */
+    .paw-animate {
+        animation: paw-walk 2s infinite ease-in-out;
+    }
+
+    .heart-beat {
+        animation: heartbeat-pet 1.2s infinite;
+    }
+}

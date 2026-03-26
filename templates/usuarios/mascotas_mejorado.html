@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mascotas Disponibles para Adopción - Hairy Love{% endblock %}
+
+{% block extra_css %}
+<style>
+    .filtros-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 8px rgba(232, 62, 140, 0.15);
+    }
+
+    .filtro-grupo {
+        margin-bottom: 1.5rem;
+    }
+
+    .filtro-grupo label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #e83e8c;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .filtro-grupo select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid rgba(232, 62, 140, 0.2);
+        border-radius: 8px;
+    }
+
+    .info-mascota {
+        background: rgba(232, 62, 140, 0.05);
+        padding: 1rem;
+        border-left: 4px solid #e83e8c;
+        margin: 1rem 0;
+        border-radius: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- ENCABEZADO -->
+    <div style="text-align: center; margin: 3rem 0;">
+        <h1 style="color: #e83e8c;">🐾 Mascotas Disponibles para Adopción</h1>
+        <p style="color: #a8419f; font-size: 1.1rem;">Encuentra tu compañero perfecto entre nuestras mascotas rescatadas</p>
+    </div>
+
+    <!-- FORMULARIO DE FILTROS -->
+    <div class="filtros-section">
+        <h3 style="margin-top: 0; color: #e83e8c;">🔍 Filtrar Mascotas</h3>
+        <form id="form-filtros" method="get" action="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <div class="filtro-grupo">
+                <label for="especie">Especie</label>
+                <select id="especie" name="especie" class="form-control">
+                    <option value="">Todas las especies</option>
+                    <option value="Perro">🐕 Perro</option>
+                    <option value="Gato">🐈 Gato</option>
+                    <option value="Conejo">🐰 Conejo</option>
+                    <option value="Ave">🦜 Ave</option>
+                    <option value="Roedor">🐹 Roedor</option>
+                    <option value="Reptil">🦎 Reptil</option>
+                    <option value="Pez">🐠 Pez</option>
+                </select>
+            </div>
+
+            <div class="filtro-grupo">
+                <label for="raza">Raza</label>
+                <select id="raza" name="raza" class="form-control">
+                    <option value="">Todas las razas</option>
+                </select>
+            </div>
+
+            <div class="filtro-grupo">
+                <label for="genero">Género</label>
+                <select id="genero" name="genero" class="form-control">
+                    <option value="">Ambos géneros</option>
+                    <option value="Macho">Macho</option>
+                    <option value="Hembra">Hembra</option>
+                </select>
+            </div>
+
+            <div class="filtro-grupo">
+                <label for="estado_salud">Estado de Salud</label>
+                <select id="estado_salud" name="estado_salud" class="form-control">
+                    <option value="">Todos los estados</option>
+                    <option value="Excelente">✅ Excelente</option>
+                    <option value="Buena">Buena</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Mala">Mala</option>
+                </select>
+            </div>
+
+            <div class="filtro-grupo">
+                <label for="esterilizado">Esterilizado</label>
+                <select id="esterilizado" name="esterilizado" class="form-control">
+                    <option value="">Cualquier estado</option>
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+
+            <div class="filtro-grupo">
+                <label for="busqueda">Buscar por nombre</label>
+                <input type="text" id="busqueda" name="busqueda" class="form-control" placeholder="Ej: Luna, Max...">
+            </div>
+
+            <div style="display: flex; gap: 1rem; align-items: flex-end;">
+                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                    🔍 Buscar Mascotas
+                </button>
+                <button type="reset" class="btn btn-secondary" style="flex: 1;">
+                    ↺ Limpiar Filtros
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- GRID DE MASCOTAS -->
+    {% if mascotas %}
+        <div class="pets-grid" style="margin-bottom: 3rem;">
+            {% for mascota in mascotas %}
+                <div class="pet-card">
+                    {% if mascota.Foto %}
+                        <img src="{{ mascota.Foto.url }}" alt="{{ mascota.Nombre_Mascota }}" class="pet-image">
+                    {% else %}
+                        <div class="pet-image" style="display: flex; align-items: center; justify-content: center; font-size: 4rem;">
+                            {% if mascota.Especie == 'Perro' %}🐕{% elif mascota.Especie == 'Gato' %}🐈{% elif mascota.Especie == 'Conejo' %}🐰{% else %}🐾{% endif %}
+                        </div>
+                    {% endif %}
+
+                    <div class="pet-info">
+                        <h3 class="pet-name">{{ mascota.Nombre_Mascota }}</h3>
+                        
+                        <div class="pet-details">
+                            <p><strong>Especie:</strong> {{ mascota.Especie }}</p>
+                            <p><strong>Raza:</strong> {{ mascota.Raza }}</p>
+                            <p><strong>Género:</strong> {{ mascota.Genero }}</p>
+                            <p><strong>Peso:</strong> {{ mascota.Peso }} kg</p>
+                            <p><strong>Color:</strong> {{ mascota.Color }}</p>
+                            <p><strong>Tamaño:</strong> {{ mascota.Tamaño }}</p>
+                        </div>
+
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                            <span class="badge badge-success">
+                                {% if mascota.Esterilizado %}✅ Esterilizado{% else %}❌ No esterilizado{% endif %}
+                            </span>
+                            <span class="badge badge-primary">{{ mascota.Estado_Salud }}</span>
+                        </div>
+
+                        {% if mascota.Socializado %}
+                            <div class="info-mascota">
+                                <strong>🎉 Esta mascota ha sido socializada</strong>
+                            </div>
+                        {% endif %}
+
+                        <a href="{% url 'formulario_adopcion' %}?mascota={{ mascota.idMascota }}" class="btn btn-primary" style="width: 100%;">
+                            ❤️ Ver Detalles y Adoptar
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 3rem 1rem;">
+            <h2 style="color: #a8419f;">🔍 No se encontraron mascotas</h2>
+            <p style="color: #777;">Intenta ajustar tus filtros para encontrar mascotas disponibles.</p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- SCRIPT PARA CARGAR RAZAS DINÁMICAMENTE -->
+<script>
+const razasPorEspecie = {
+    'Perro': ['Labrador Retriever', 'Pastor Alemán', 'Golden Retriever', 'Bulldog Francés', 'Poodle', 'Beagle', 'Otra Raza'],
+    'Gato': ['Persa', 'Maine Coon', 'Siamés', 'Bengalí', 'Ragdoll', 'Scottish Fold', 'Otra Raza'],
+    'Conejo': ['Conejo de Angora', 'Conejo Belier', 'Otra Raza'],
+    'Ave': ['Loro Verde', 'Guacamayo', 'Cacatúa', 'Canario', 'Otra Raza'],
+    'Roedor': ['Hámster', 'Ratón', 'Rata', 'Conejillo de Indias', 'Otra Raza'],
+    'Reptil': ['Serpiente', 'Iguana', 'Dragón Barbudo', 'Tortuga', 'Otra Raza'],
+    'Pez': ['Pez Dorado', 'Carpa Koi', 'Pez Beta', 'Otra Raza']
+};
+
+document.getElementById('especie').addEventListener('change', function() {
+    const especie = this.value;
+    const razaSelect = document.getElementById('raza');
+    razaSelect.innerHTML = '<option value="">Todas las razas</option>';
+    
+    if (especie && razasPorEspecie[especie]) {
+        razasPorEspecie[especie].forEach(raza => {
+            const option = document.createElement('option');
+            option.value = raza;
+            option.textContent = raza;
+            razaSelect.appendChild(option);
+        });
+    }
+});
+</script>
+{% endblock %}

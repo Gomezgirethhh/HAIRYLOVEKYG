@@ -1,0 +1,509 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hairy Love - Adopta Responsablemente{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos adicionales para homepage */
+    .hero {
+        background: linear-gradient(135deg, rgba(232, 62, 140, 0.1), rgba(168, 65, 159, 0.05)) !important;
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(255, 105, 180, 0.1), transparent);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    .hero::after {
+        content: '';
+        position: absolute;
+        bottom: -50%;
+        left: -10%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(199, 21, 133, 0.1), transparent);
+        border-radius: 50%;
+        animation: float 8s ease-in-out infinite;
+    }
+    
+    .hero h1 {
+        position: relative;
+        z-index: 1;
+        animation: slideInFromTop 0.8s ease;
+    }
+    
+    .hero p {
+        position: relative;
+        z-index: 1;
+        animation: slideInFromTop 0.8s ease 0.2s both;
+    }
+    
+    .hero-buttons {
+        position: relative;
+        z-index: 1;
+        animation: slideInFromTop 0.8s ease 0.4s both;
+    }
+    
+    /* Estadísticas animadas */
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+        padding: 2rem;
+        background: linear-gradient(135deg, var(--lighter-pink), white);
+        border-radius: 15px;
+    }
+    
+    .stat-card {
+        text-align: center;
+        padding: 1.5rem;
+        animation: slideInFromLeft 0.6s ease;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        color: #e83e8c;
+        font-weight: bold;
+        animation: slideInFromTop 0.6s ease;
+    }
+    
+    .stat-label {
+        color: var(--color-text-light);
+        margin-top: 0.5rem;
+    }
+    
+    /* Testimonios */
+    .testimonials-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+    
+    .testimonial-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: var(--shadow-sm);
+        border-left: 4px solid #e83e8c;
+        transition: all 0.3s ease;
+        animation: slideInFromRight 0.6s ease;
+    }
+    
+    .testimonial-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .testimonial-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #e83e8c, #a8419f);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .testimonial-stars {
+        color: #ffc107;
+        margin-bottom: 0.5rem;
+    }
+    
+    .testimonial-text {
+        font-style: italic;
+        color: var(--color-text-light);
+        margin-bottom: 1rem;
+    }
+    
+    .testimonial-author {
+        font-weight: 600;
+        color: var(--color-primario);
+    }
+    
+    /* Proceso paso a paso */
+    .process-steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+        position: relative;
+    }
+    
+    .process-steps::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #e83e8c, transparent);
+        z-index: 0;
+        display: none;
+    }
+    
+    @media (max-width: 768px) {
+        .process-steps::before {
+            display: none;
+        }
+    }
+    
+    .process-step {
+        background: linear-gradient(135deg, var(--lighter-pink), white);
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        animation: zoomIn 0.6s ease;
+    }
+    
+    .process-step-number {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #e83e8c, #a8419f);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0 auto 1rem;
+        animation: bounce-soft 0.6s ease;
+    }
+    
+    /* Galería de mascotas con efecto 3D */
+    .mascota-card {
+        position: relative;
+        transition: all 0.4s ease;
+        transform: perspective(1000px);
+    }
+    
+    .mascota-card:hover {
+        transform: perspective(1000px) rotateY(5deg) rotateX(-5deg) translateY(-10px);
+    }
+    
+    .favorite-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: #ccc;
+        transition: all 0.3s ease;
+        z-index: 10;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .favorite-btn:hover,
+    .favorite-btn.active {
+        color: #e83e8c;
+        background: rgba(232, 62, 140, 0.1);
+        animation: heartbeat 0.6s ease;
+    }
+    
+    /* Animación de entrada en cascada */
+    .fade-in {
+        animation: fadeInUp 0.6s ease;
+    }
+    
+    .role-card, .servicio-card {
+        animation: slideInFromLeft 0.5s ease !important;
+    }
+    
+    .role-card:nth-child(2) {
+        animation-delay: 0.1s !important;
+    }
+    
+    .role-card:nth-child(3) {
+        animation-delay: 0.2s !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- HERO SECTION CON ANIMACIÓN -->
+    <div class="hero">
+        <h1><i class="fas fa-star" style="color: #ffc107; margin-right: 0.5rem;"></i> Dale un hogar lleno de amor y alegría <i class="fas fa-star" style="color: #ffc107; margin-left: 0.5rem;"></i></h1>
+        <p>
+            💕 Conectamos mascotas con familias responsables. Encuentra a tu compañero perfecto y cambia dos vidas para siempre.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="{% url 'formularioServicios' %}" class="btn-primary">
+                <i class="fas fa-heartbeat"></i> Quiero un servicio
+            </a>
+            <a href="{% url 'mascotas_adopcion' %}" class="btn-pink">
+                <i class="fas fa-paw"></i> Quiero adoptar
+            </a>
+        </div>
+    </div>
+
+    <!-- ESTADÍSTICAS ANIMADAS -->
+    <section class="stats-container" data-animate>
+        <div class="stat-card">
+            <div class="stat-number" data-counter="150">0</div>
+            <div class="stat-label">🐾 Mascotas Disponibles</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" data-counter="1250">0</div>
+            <div class="stat-label">👨‍👩‍👧‍👦 Familias Felices</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" data-counter="380">0</div>
+            <div class="stat-label">🏥 Especialistas Verificados</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" data-counter="500">0</div>
+            <div class="stat-label">⭐ Calificación Promedio</div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE ROLES -->
+    <section class="section" data-animate>
+        <h2><i class="fas fa-users"></i> Conoce a nuestra comunidad</h2>
+
+        <div class="roles-grid">
+            <div class="role-card">
+                <div style="font-size: 3.5rem; margin-bottom: 15px; animation: wave 2s ease-in-out infinite;">❤️</div>
+                <h3>Criador Responsable</h3>
+                <p>
+                    Comparte el amor por las mascotas asegurando crianza responsable
+                    y casos de rescate.
+                </p>
+                <a href="{% url 'registro' %}" class="btn-primary" style="margin-top: 15px;">
+                    <i class="fas fa-hand-sparkles"></i> Quiero ser criador
+                </a>
+            </div>
+
+            <div class="role-card">
+                <div style="font-size: 3.5rem; margin-bottom: 15px; animation: wave 2s ease-in-out infinite 0.2s;">🏥</div>
+                <h3>Especialista Veterinario</h3>
+                <p>
+                    Brinda atención médica y cuidado profesional para que cada mascota
+                    crezca sana y feliz.
+                </p>
+                <a href="{% url 'registro' %}" class="btn-primary" style="margin-top: 15px;">
+                    <i class="fas fa-stethoscope"></i> Quiero ser especialista
+                </a>
+            </div>
+
+            <div class="role-card">
+                <div style="font-size: 3.5rem; margin-bottom: 15px; animation: wave 2s ease-in-out infinite 0.4s;">🏠</div>
+                <h3>Propietario Amoroso</h3>
+                <p>
+                    Abre las puertas de tu hogar y corazón para brindar compañía,
+                    amor y una nueva vida a tu amigo peludo.
+                </p>
+                <a href="{% url 'mascotas_adopcion' %}" class="btn-primary" style="margin-top: 15px;">
+                    <i class="fas fa-home"></i> Explorar mascotas
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE MASCOTAS DESTACADAS -->
+    {% if mascotas %}
+        <section class="section" style="background: linear-gradient(135deg, rgba(154, 39, 176, 0.05), rgba(255, 64, 129, 0.05)); border-radius: 20px;" data-animate>
+            <h2><i class="fas fa-paw"></i> 🌟 Mascotas disponibles ahora</h2>
+
+            <div class="mascotas-grid">
+                {% for mascota in mascotas %}
+                    <div class="mascota-card fade-in" data-pet-name="{{ mascota.Nombre_Mascota }}" data-pet-breed="{{ mascota.Raza }}">
+                        <button class="favorite-btn" data-pet-id="{{ mascota.idMascota }}">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <div style="background: linear-gradient(135deg, var(--light-bg), var(--light-purple)); height: 200px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                            <div style="font-size: 4rem; animation: bounce-soft 0.8s ease infinite;">
+                                {% if 'Gato' in mascota.Especie %}🐱{% elif 'Perro' in mascota.Especie %}🐕{% else %}🐾{% endif %}
+                            </div>
+                        </div>
+                        <div class="mascota-info">
+                            <h3>{{ mascota.Nombre_Mascota }}</h3>
+                            <div>
+                                <span class="badge">{{ mascota.Especie }}</span>
+                                <span class="badge">{{ mascota.Raza }}</span>
+                            </div>
+                            <p><i class="fas fa-venus-mars" style="color: #e83e8c;"></i> <strong>Género:</strong> {{ mascota.Genero }}</p>
+                            <p><i class="fas fa-birthday-cake" style="color: #e83e8c;"></i> <strong>Edad:</strong> {{ mascota.Fecha_Nacimiento }}</p>
+                            <p><i class="fas fa-heart-pulse" style="color: #00c853;"></i> <strong>Estado:</strong> <span style="color: #00c853; font-weight: bold;">{{ mascota.Estado_Salud }}</span></p>
+                            <a href="{% url 'mascotas_adopcion' %}" class="btn-primary" style="margin-top: 10px; font-size: 0.9rem; width: 100%;">
+                                <i class="fas fa-heart"></i> Ver más
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="{% url 'mascotas_adopcion' %}" class="btn-primary" style="font-size: 1.1rem; animation: pulse 1s ease-in-out infinite;">
+                    <i class="fas fa-arrow-right"></i> Ver todas las mascotas <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </section>
+    {% endif %}
+
+    <!-- PROCESO PASO A PASO -->
+    <section class="section" data-animate>
+        <h2><i class="fas fa-route"></i> Cómo funciona el proceso de adopción</h2>
+        
+        <div class="process-steps">
+            <div class="process-step">
+                <div class="process-step-number">1</div>
+                <h4>Regístrate</h4>
+                <p>Crea tu cuenta de forma rápida y segura</p>
+            </div>
+            <div class="process-step">
+                <div class="process-step-number">2</div>
+                <h4>Explora</h4>
+                <p>Navega entre nuestras mascotas disponibles</p>
+            </div>
+            <div class="process-step">
+                <div class="process-step-number">3</div>
+                <h4>Conecta</h4>
+                <p>Comunícate con el actual propietario o criador</p>
+            </div>
+            <div class="process-step">
+                <div class="process-step-number">4</div>
+                <h4>Adopta</h4>
+                <p>¡Bienvenido a tu nuevo amigo a casa!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE CARACTERÍSTICAS -->
+    <section class="section" data-animate>
+        <h2><i class="fas fa-star"></i> ¿Por qué elegir Hairy Love?</h2>
+
+        <div class="mascotas-grid" style="margin-top: 50px;">
+            <div class="servicio-card" style="text-align: center;">
+                <div style="font-size: 3rem; color: var(--primary-pink); margin-bottom: 15px;">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Proceso Seguro</h3>
+                <p>Verificamos a todos los usuarios para garantizar adopciones responsables y seguras.</p>
+            </div>
+
+            <div class="servicio-card" style="text-align: center;">
+                <div style="font-size: 3rem; color: var(--primary-pink); margin-bottom: 15px;">
+                    <i class="fas fa-heart pulse-animation"></i>
+                </div>
+                <h3>Cuidado Personalizado</h3>
+                <p>Cada mascota tiene un perfil detallado con su historia y necesidades especiales.</p>
+            </div>
+
+            <div class="servicio-card" style="text-align: center;">
+                <div style="font-size: 3rem; color: var(--primary-pink); margin-bottom: 15px;">
+                    <i class="fas fa-network-wired"></i>
+                </div>
+                <h3>Comunidad Conectada</h3>
+                <p>Accede a servicios especializados y mantén contacto con otros adoptantes.</p>
+            </div>
+
+            <div class="servicio-card" style="text-align: center;">
+                <div style="font-size: 3rem; color: var(--primary-pink); margin-bottom: 15px;">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3>Seguimiento Continuo</h3>
+                <p>Te acompañamos después de la adopción con asesoramiento y apoyo veterinario.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIOS -->
+    <section class="section" data-animate>
+        <h2><i class="fas fa-comments"></i> Lo que dicen nuestros usuarios</h2>
+        
+        <div class="testimonials-container">
+            <div class="testimonial-card">
+                <div class="testimonial-avatar">🐕</div>
+                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">"Hairy Love me ayudó a encontrar a mi mejor amigo. El proceso fue fácil y seguro. ¡Recomendado!"</p>
+                <p class="testimonial-author">— María López, Propietario</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-avatar">🐱</div>
+                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">"Como criadora, valoro mucho que Hairy Love verifique a todos los adoptantes. Mis mascotas van a buenas manos."</p>
+                <p class="testimonial-author">— Carmen Ruiz, Criadora</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-avatar">🏥</div>
+                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">"Excelente plataforma para conectar con propietarios responsables. El seguimiento post-adopción es excepcional."</p>
+                <p class="testimonial-author">— Dr. Juan Méndez, Veterinario</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CALL TO ACTION FINAL -->
+    <section class="section" style="background: linear-gradient(135deg, var(--primary-purple), var(--light-purple)); border-radius: 20px; color: white; text-align: center;" data-animate>
+        <h2 style="color: white;"><i class="fas fa-plus-circle"></i> Comienza tu viaje con nosotros</h2>
+        <p style="font-size: 1.2rem; margin: 20px 0 40px;">
+            Ya sea que quieras adoptar, ofertar servicios o ayudar como criador, tenemos un lugar para ti.
+        </p>
+        
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <a href="{% url 'mascotas_adopcion' %}" class="btn-primary" style="background: white; color: var(--primary-purple); animation: bounce-soft 0.6s ease;">
+                <i class="fas fa-paw"></i> Adoptar Mascota
+            </a>
+            <a href="{% url 'formularioServicios' %}" class="btn-outline" style="border-color: white; color: white; animation: bounce-soft 0.6s ease 0.1s both;">
+                <i class="fas fa-briefcase"></i> Ofrecer Servicios
+            </a>
+            <a href="{% url 'registro' %}" class="btn-outline" style="border-color: white; color: white; animation: bounce-soft 0.6s ease 0.2s both;">
+                <i class="fas fa-user-plus"></i> Unirme como Criador
+            </a>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/innovations.js' %}"></script>
+<script>
+    // Activar contadores numéricos
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('[data-counter]').forEach(el => {
+            const target = parseInt(el.getAttribute('data-counter'));
+            let current = 0;
+            const increment = target / 30;
+            const interval = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    el.textContent = target + '+';
+                    clearInterval(interval);
+                } else {
+                    el.textContent = Math.floor(current);
+                }
+            }, 50);
+        });
+    });
+</script>
+{% endblock %}

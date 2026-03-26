@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mis Favoritos - Hairy Love{% endblock %}
+
+{% block extra_css %}
+<style>
+    .favoritos-container {
+        min-height: 80vh;
+        padding: 2rem;
+        background: linear-gradient(135deg, #f5e6e1 0%, #f0dce6 100%);
+    }
+
+    .favoritos-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        animation: slideInFromTop 0.6s ease-out;
+    }
+
+    .favoritos-header h1 {
+        font-size: 3rem;
+        background: linear-gradient(135deg, #e83e8c, #a8419f);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+    }
+
+    .favoritos-counter {
+        font-size: 1.2rem;
+        color: #636e72;
+    }
+
+    .favoritos-empty {
+        text-align: center;
+        padding: 3rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(232, 62, 140, 0.1);
+    }
+
+    .favoritos-empty i {
+        font-size: 4rem;
+        color: #e83e8c;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .favoritos-empty p {
+        color: #636e72;
+        font-size: 1.1rem;
+    }
+
+    .favoritos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .favorito-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(232, 62, 140, 0.1);
+        transition: all 0.3s ease;
+        animation: slideInFromBottom 0.5s ease-out;
+    }
+
+    .favorito-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(232, 62, 140, 0.2);
+    }
+
+    .favorito-image {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        background: linear-gradient(135deg, #f5e6e1, #f0dce6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+    }
+
+    .favorito-content {
+        padding: 1.5rem;
+    }
+
+    .favorito-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #2d3436;
+        margin-bottom: 0.5rem;
+    }
+
+    .favorito-tipo {
+        display: inline-block;
+        background: linear-gradient(135deg, #e83e8c, #a8419f);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .favorito-info {
+        color: #636e72;
+        font-size: 0.9rem;
+        margin: 0.5rem 0;
+    }
+
+    .favorito-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .btn-ver-detalles {
+        flex: 1;
+        padding: 0.8rem;
+        background: linear-gradient(135deg, #e83e8c, #a8419f);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .btn-ver-detalles:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(232, 62, 140, 0.3);
+    }
+
+    .btn-remover-favorito {
+        flex: 1;
+        padding: 0.8rem;
+        background: #f0f0f0;
+        color: #e83e8c;
+        border: 2px solid #e83e8c;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-remover-favorito:hover {
+        background: #e83e8c;
+        color: white;
+    }
+
+    .seccion-favoritos {
+        margin-bottom: 3rem;
+    }
+
+    .seccion-titulo {
+        font-size: 1.8rem;
+        color: #2d3436;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 3px solid #e83e8c;
+    }
+
+    .seccion-titulo i {
+        margin-right: 0.5rem;
+        color: #e83e8c;
+    }
+
+    @keyframes slideInFromTop {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInFromBottom {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .favoritos-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .favoritos-header h1 {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="favoritos-container">
+    <!-- Header -->
+    <div class="favoritos-header">
+        <h1><i class="fas fa-heart"></i> Mis Favoritos</h1>
+        <p class="favoritos-counter">{{ total_favoritos }} elemento{{ total_favoritos|pluralize }}</p>
+    </div>
+
+    <!-- Mensajes -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Mascotas Favoritas -->
+    {% if mascotas_favoritas %}
+    <div class="seccion-favoritos">
+        <h2 class="seccion-titulo"><i class="fas fa-paw"></i> Mascotas Favoritas</h2>
+        <div class="favoritos-grid">
+            {% for mascota in mascotas_favoritas %}
+            <div class="favorito-card">
+                <div class="favorito-image">
+                    {% if mascota.foto_mascota %}
+                        <img src="{{ mascota.foto_mascota.url }}" alt="{{ mascota.Nombre_Mascota }}">
+                    {% else %}
+                        🐾
+                    {% endif %}
+                </div>
+                <div class="favorito-content">
+                    <div class="favorito-titulo">{{ mascota.Nombre_Mascota }}</div>
+                    <span class="favorito-tipo">{{ mascota.get_Especie_display|default:mascota.Especie }}</span>
+                    <div class="favorito-info">
+                        <strong>Raza:</strong> {{ mascota.Raza }}
+                    </div>
+                    <div class="favorito-info">
+                        <strong>Género:</strong> {{ mascota.Genero }}
+                    </div>
+                    <div class="favorito-info">
+                        <strong>Salud:</strong> {{ mascota.Estado_Salud }}
+                    </div>
+                    <div class="favorito-actions">
+                        <a href="{% url 'mascotas_adopcion' %}?busqueda={{ mascota.Nombre_Mascota }}" class="btn-ver-detalles">
+                            <i class="fas fa-info-circle"></i> Ver Detalles
+                        </a>
+                        <button class="btn-remover-favorito" onclick="removerFavorito('mascota', {{ mascota.idMascota }})">
+                            <i class="fas fa-trash"></i> Remover
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Servicios Favoritos -->
+    {% if servicios_favoritos %}
+    <div class="seccion-favoritos">
+        <h2 class="seccion-titulo"><i class="fas fa-stethoscope"></i> Servicios Favoritos</h2>
+        <div class="favoritos-grid">
+            {% for servicio in servicios_favoritos %}
+            <div class="favorito-card">
+                <div class="favorito-image">
+                    {% if servicio.foto_servicio %}
+                        <img src="{{ servicio.foto_servicio.url }}" alt="{{ servicio.nombre_servicio }}">
+                    {% else %}
+                        🏥
+                    {% endif %}
+                </div>
+                <div class="favorito-content">
+                    <div class="favorito-title">{{ servicio.nombre_servicio }}</div>
+                    <span class="favorito-tipo">{{ servicio.tipo_servicio }}</span>
+                    <div class="favorito-info">
+                        <strong>Precio:</strong> ${{ servicio.precio_base }}
+                    </div>
+                    <div class="favorito-info">
+                        <strong>Duración:</strong> {{ servicio.duracion_estimada }} minutos
+                    </div>
+                    {% if servicio.puntuacion %}
+                    <div class="favorito-info">
+                        <strong>Rating:</strong> ⭐ {{ servicio.puntuacion }}/5
+                    </div>
+                    {% endif %}
+                    <div class="favorito-actions">
+                        <a href="{% url 'formularioServicios' %}" class="btn-ver-detalles">
+                            <i class="fas fa-briefcase"></i> Solicitar
+                        </a>
+                        <button class="btn-remover-favorito" onclick="removerFavorito('servicio', {{ servicio.idServicio }})">
+                            <i class="fas fa-trash"></i> Remover
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Sin favoritos -->
+    {% if not mascotas_favoritas and not servicios_favoritos %}
+    <div class="favoritos-empty">
+        <i class="fas fa-heart-broken"></i>
+        <h2>No tienes favoritos aún</h2>
+        <p>Explora nuestras mascotas y servicios, y marca los que más te gusten ❤️</p>
+        <a href="{% url 'mascotas_adopcion' %}" class="btn-ver-detalles" style="display: inline-block; margin-top: 1rem;">
+            Explorar Mascotas
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    function removerFavorito(tipo, id) {
+        if (confirm('¿Estás seguro de que quieres remover esto de favoritos?')) {
+            fetch('{% url "toggle_favorito" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    tipo: tipo,
+                    id: id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Hubo un error al remover el favorito');
+            });
+        }
+    }
+</script>
+{% endblock %}

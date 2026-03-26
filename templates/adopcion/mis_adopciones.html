@@ -1,0 +1,367 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mis Adopciones - Hairy Love{% endblock %}
+
+{% block content %}
+<style>
+    .mis-adopciones-container {
+        max-width: 1200px;
+        margin: 80px auto 40px;
+        padding: 0 20px;
+    }
+    
+    .header-section {
+        text-align: center;
+        margin-bottom: 50px;
+        animation: fadeInDown 0.8s ease;
+    }
+    
+    .header-section h1 {
+        font-size: 2.5em;
+        color: #2c3;
+        margin-bottom: 15px;
+        font-weight: 800;
+    }
+    
+    .header-buttons {
+        margin-top: 20px;
+    }
+    
+    .btn-explorar {
+        display: inline-block;
+        background: linear-gradient(135deg, #FF6B9D, #FF8FBC);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-explorar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+    }
+    
+    .adopciones-lista {
+        display: grid;
+        gap: 20px;
+        margin-bottom: 50px;
+    }
+    
+    .adopcion-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        animation: slideInUp 0.6s ease;
+        display: grid;
+        grid-template-columns: 150px 1fr;
+    }
+    
+    .adopcion-card:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+    }
+    
+    .adopcion-imagen {
+        background: linear-gradient(135deg, #FFB6C1, #FF69B4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3em;
+        overflow: hidden;
+    }
+    
+    .adopcion-imagen img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .adopcion-contenido {
+        padding: 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    .adopcion-info h3 {
+        font-size: 1.5em;
+        color: #FF6B9D;
+        margin: 0 0 10px;
+        font-weight: 800;
+    }
+    
+    .adopcion-info p {
+        margin: 5px 0;
+        color: #666;
+        font-size: 0.95em;
+    }
+    
+    .adopcion-estado {
+        text-align: center;
+        min-width: 150px;
+    }
+    
+    .estado-badge {
+        display: inline-block;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    
+    .estado-pendiente {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .estado-confirmada {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+    
+    .estado-aprobada {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .estado-rechazada {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .botones-acciones {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .btn-accion {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-ver-detalles {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+    
+    .btn-ver-detalles:hover {
+        background: #1976d2;
+        color: white;
+    }
+    
+    .btn-descargar-pdf {
+        background: #f3e5f5;
+        color: #6a1b9a;
+    }
+    
+    .btn-descargar-pdf:hover {
+        background: #6a1b9a;
+        color: white;
+    }
+    
+    .sin-adopciones {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sin-adopciones h2 {
+        font-size: 2em;
+        color: #999;
+        margin-bottom: 15px;
+    }
+    
+    .sin-adopciones p {
+        color: #bbb;
+        font-size: 1.1em;
+        margin-bottom: 25px;
+    }
+    
+    .contador {
+        background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(255, 143, 188, 0.1));
+        border-left: 4px solid #FF6B9D;
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        color: #555;
+        font-weight: 600;
+    }
+    
+    .filtros-estado {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+    
+    .filtro-btn {
+        padding: 8px 16px;
+        border: 2px solid #ddd;
+        background: white;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .filtro-btn:hover {
+        border-color: #FF6B9D;
+        color: #FF6B9D;
+    }
+    
+    .filtro-btn.activo {
+        background: #FF6B9D;
+        color: white;
+        border-color: #FF6B9D;
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .adopcion-card {
+            grid-template-columns: 1fr;
+        }
+        
+        .adopcion-imagen {
+            min-height: 150px;
+        }
+        
+        .adopcion-contenido {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .adopcion-estado {
+            min-width: auto;
+        }
+        
+        .botones-acciones {
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="mis-adopciones-container">
+    <div class="header-section">
+        <h1>❤️ Mis Adopciones</h1>
+        <p>Gestiona tus solicitudes de adopción</p>
+        <div class="header-buttons">
+            <a href="{% url 'mascotas_adopcion_disponibles' %}" class="btn-explorar">
+                + Explorar Mascotas
+            </a>
+        </div>
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}" style="margin-bottom: 25px;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    {% if adopciones %}
+        <div class="contador">
+            ❤️ Tienes <strong>{{ total_adopciones }}</strong> solicitud(es) de adopción
+        </div>
+        
+        <div class="adopciones-lista">
+            {% for adopcion in adopciones %}
+                <div class="adopcion-card">
+                    <div class="adopcion-imagen">
+                        {% if adopcion.idMascota.foto_mascota %}
+                            <img src="{{ adopcion.idMascota.foto_mascota.url }}" alt="{{ adopcion.idMascota.Nombre_Mascota }}">
+                        {% else %}
+                            {{ adopcion.idMascota.Especie|first|upper }}
+                        {% endif %}
+                    </div>
+                    
+                    <div class="adopcion-contenido">
+                        <div class="adopcion-info">
+                            <h3>{{ adopcion.idMascota.Nombre_Mascota }}</h3>
+                            <p><strong>Raza:</strong> {{ adopcion.idMascota.Raza }}</p>
+                            <p><strong>Especie:</strong> {{ adopcion.idMascota.Especie }}</p>
+                            <p><strong>Solicitud:</strong> {{ adopcion.Fecha_Solicitud|date:"d/m/Y" }}</p>
+                        </div>
+                        
+                        <div class="adopcion-estado">
+                            <div class="estado-badge estado-{{ adopcion.Estado|lower }}">
+                                {% if adopcion.Estado == 'Pendiente' %}
+                                    ⏳ Pendiente
+                                {% elif adopcion.Estado == 'Confirmada' %}
+                                    ✓ Confirmada
+                                {% elif adopcion.Estado == 'Aprobada' %}
+                                    ✅ Aprobada
+                                {% else %}
+                                    ✗ {{ adopcion.Estado }}
+                                {% endif %}
+                            </div>
+                            <p style="font-size: 0.85em; color: #999;">{{ adopcion.Estado_Solicitud }}</p>
+                            
+                            <div class="botones-acciones">
+                                <a href="{% url 'detalles_mascota' adopcion.idMascota.idMascota %}" class="btn-accion btn-ver-detalles">
+                                    👀 Detalles
+                                </a>
+                                {% if adopcion.Estado == 'Aprobada' %}
+                                    <a href="{% url 'descargar_reporte_adopcion' adopcion.idAdopcion %}" class="btn-accion btn-descargar-pdf">
+                                        📄 PDF
+                                    </a>
+                                {% else %}
+                                    <button class="btn-accion" style="background: #ccc; color: #666; cursor: not-allowed;" disabled title="El PDF estará disponible cuando la adopción sea aprobada">
+                                        📄 PDF (En revisión)
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="sin-adopciones">
+            <h2>😿 No tienes solicitudes de adopción</h2>
+            <p>Aún no has solicitado la adopción de ninguna mascota.</p>
+            <a href="{% url 'mascotas_adopcion_disponibles' %}" class="btn-explorar">
+                🐾 Explorar Mascotas Disponibles
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,401 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Perfil Criador - Hairy Love{% endblock %}
+
+{% block content %}
+<style>
+    .criador-container {
+        margin-top: 80px;
+        padding: 0 20px;
+    }
+    
+    .criador-header {
+        background: linear-gradient(135deg, #FF6B9D, #FF8FBC);
+        color: white;
+        padding: 50px 20px;
+        border-radius: 15px;
+        margin-bottom: 40px;
+        animation: fadeInDown 0.8s ease;
+        text-align: center;
+    }
+    
+    .criador-header h1 {
+        font-size: 2.5em;
+        margin: 0;
+        font-weight: 800;
+    }
+    
+    .criador-header p {
+        margin: 10px 0 0;
+        font-size: 1.1em;
+        opacity: 0.95;
+    }
+    
+    .criador-contenido {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .seccion-titulo {
+        font-size: 1.8em;
+        color: #FF6B9D;
+        margin: 40px 0 25px;
+        font-weight: 800;
+        border-bottom: 3px solid #FF6B9D;
+        padding-bottom: 15px;
+    }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+    
+    .info-card {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        animation: slideInUp 0.6s ease;
+    }
+    
+    .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .info-label {
+        color: #999;
+        font-size: 0.85em;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+    
+    .info-value {
+        color: #333;
+        font-size: 1.2em;
+        font-weight: 700;
+    }
+    
+    .mascotas-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+        margin-bottom: 50px;
+    }
+    
+    .mascota-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        animation: slideInUp 0.6s ease;
+    }
+    
+    .mascota-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .mascota-imagen {
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(135deg, #FFB6C1, #FF69B4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4em;
+        overflow: hidden;
+    }
+    
+    .mascota-imagen img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .mascota-info {
+        padding: 20px;
+    }
+    
+    .mascota-nombre {
+        font-size: 1.4em;
+        font-weight: 800;
+        color: #FF6B9D;
+        margin-bottom: 8px;
+    }
+    
+    .mascota-detalles {
+        color: #666;
+        font-size: 0.95em;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+    
+    .btn-ver-mascota {
+        display: inline-block;
+        background: linear-gradient(135deg, #FF6B9D, #FF8FBC);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .btn-ver-mascota:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+    }
+    
+    .sin-mascotas {
+        background: white;
+        border-radius: 12px;
+        padding: 40px;
+        text-align: center;
+        color: #999;
+        margin: 20px 0;
+    }
+    
+    .sin-mascotas h3 {
+        margin: 0 0 10px;
+        font-size: 1.3em;
+    }
+    
+    .sin-mascotas p {
+        margin: 5px 0;
+    }
+    
+    .btn-registrar-mascota {
+        display: inline-block;
+        background: linear-gradient(135deg, #FF6B9D, #FF8FBC);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        margin-top: 15px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-registrar-mascota:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+    }
+    
+    .estadisticas {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+        animation: slideInUp 0.6s ease;
+    }
+    
+    .estadisticas-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .estadistica {
+        text-align: center;
+        padding: 15px;
+    }
+    
+    .estadistica-numero {
+        font-size: 2.5em;
+        font-weight: 800;
+        color: #FF6B9D;
+    }
+    
+    .estadistica-label {
+        color: #999;
+        font-size: 0.9em;
+        margin-top: 8px;
+        font-weight: 600;
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .criador-header {
+            padding: 30px 20px;
+        }
+        
+        .criador-header h1 {
+            font-size: 2em;
+        }
+        
+        .mascotas-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="criador-container">
+    {% if criador %}
+        <!-- ENCABEZADO DEL CRIADOR -->
+        <div class="criador-header">
+            <h1>🐾 Perfil de Criador</h1>
+            <p>{{ criador.user.nombre }} {{ criador.user.apellido }}</p>
+        </div>
+        
+        <div class="criador-contenido">
+            <!-- INFORMACIÓN DEL CRIADOR -->
+            <div class="seccion-titulo">📋 Información del Criador</div>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-label">Nombre Completo</div>
+                    <div class="info-value">{{ criador.user.nombre }} {{ criador.user.apellido }}</div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-label">Correo</div>
+                    <div class="info-value" style="font-size: 1em;">{{ criador.user.correo }}</div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-label">Teléfono</div>
+                    <div class="info-value">{{ criador.user.telefono|default:"No registrado" }}</div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-label">Tipo de Criador</div>
+                    <div class="info-value">{{ criador.Tipo_Criador }}</div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-label">Verificación</div>
+                    <div class="info-value">{{ criador.Estado_Verificacion }}</div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-label">Ubicación</div>
+                    <div class="info-value">{{ criador.user.direccion|default:"No configurada" }}</div>
+                </div>
+            </div>
+            
+            {% if criador.Razon_Dar_Adopcion %}
+                <div class="estadisticas">
+                    <h3 style="color: #FF6B9D; margin-top: 0;">ℹ️ Razón de Dar en Adopción</h3>
+                    <p style="color: #666; line-height: 1.8;">{{ criador.Razon_Dar_Adopcion }}</p>
+                </div>
+            {% endif %}
+            
+            <!-- ESTADÍSTICAS -->
+            <div class="estadisticas">
+                <h3 style="color: #FF6B9D; margin-top: 0;">📊 Estadísticas</h3>
+                <div class="estadisticas-grid">
+                    <div class="estadistica">
+                        <div class="estadistica-numero">{{ mascotas|length }}</div>
+                        <div class="estadistica-label">Mascotas Registradas</div>
+                    </div>
+                    <div class="estadistica">
+                        <div class="estadistica-numero">{{ criador.Fecha_Registro|date:"Y"|add:"-2026"|add:"1" }}</div>
+                        <div class="estadistica-label">Años en Plataforma</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MIS MASCOTAS -->
+            <div class="seccion-titulo">🐶 Mis Mascotas Disponibles</div>
+            
+            {% if mascotas %}
+                <div class="mascotas-grid">
+                    {% for mascota in mascotas %}
+                        <div class="mascota-card">
+                            <div class="mascota-imagen">
+                                {% if mascota.foto_mascota %}
+                                    <img src="{{ mascota.foto_mascota.url }}" alt="{{ mascota.Nombre_Mascota }}">
+                                {% else %}
+                                    {{ mascota.Especie|first|upper }}
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mascota-info">
+                                <div class="mascota-nombre">{{ mascota.Nombre_Mascota }}</div>
+                                
+                                <div class="mascota-detalles">
+                                    <strong>{{ mascota.Especie }}</strong><br>
+                                    Raza: {{ mascota.Raza }}<br>
+                                    Tamaño: {{ mascota.Tamaño }}<br>
+                                    <span style="color: #FF6B9D; font-weight: 600;">
+                                        {% if mascota.disponible %}
+                                            ✓ Disponible
+                                        {% else %}
+                                            ✗ Adoptada
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                
+                                <a href="{% url 'detalles_mascota' mascota.idMascota %}" class="btn-ver-mascota">
+                                    👀 Ver Detalles
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="sin-mascotas">
+                    <h3>😿 No hay mascotas registradas aún</h3>
+                    <p>Este criador aún no ha registrado mascotas en el sistema.</p>
+                </div>
+            {% endif %}
+            
+            <!-- BOTÓN PARA REGISTRAR MASCOTA (solo si es el usuario logueado) -->
+            {% if user.is_authenticated and user == criador.user %}
+                <div style="text-align: center; margin: 40px 0;">
+                    <a href="{% url 'editar_perfil' %}" class="btn-registrar-mascota" style="background: linear-gradient(135deg, #a8419f, #8B3A7D);">
+                        ✏️ Editar Perfil
+                    </a>
+                    <a href="{% url 'registrar_mascota_adopcion' %}" class="btn-registrar-mascota">
+                        + Registrar Nueva Mascota
+                    </a>
+                    <a href="{% url 'solicitudes_adopcion_criador' %}" class="btn-registrar-mascota" style="margin-left: 15px; background: linear-gradient(135deg, #28a745, #20c997);">
+                        📋 Ver Solicitudes de Adopción
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    {% else %}
+        <div style="background: white; border-radius: 12px; padding: 60px 20px; text-align: center; color: #999;">
+            <h2>⚠️ Criador no encontrado</h2>
+            <p>No se pudo cargar la información del criador.</p>
+            <a href="{% url 'principal' %}" style="display: inline-block; margin-top: 20px; padding: 12px 30px; background: linear-gradient(135deg, #FF6B9D, #FF8FBC); color: white; border-radius: 25px; text-decoration: none; font-weight: 600;">
+                Volver al Inicio
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

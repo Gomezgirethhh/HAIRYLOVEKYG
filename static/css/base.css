@@ -1,0 +1,1016 @@
+/* ============================================
+   HAIRY LOVE - Estilos Base y Globales
+   Tema: Femenino Rosa/Morado
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Colores principales */
+    --color-primario: #e83e8c;      /* Rosa fucsia */
+    --color-secundario: #a8419f;    /* Morado */
+    --color-terciario: #ffc0cb;     /* Rosa claro */
+    --color-light: #fff5f7;         /* Fondo rosa muy claro */
+    --color-white: #ffffff;
+    --color-text: #4a4a4a;
+    --color-text-light: #777777;
+    --color-success: #28a745;
+    --color-danger: #dc3545;
+    --color-warning: #ffc107;
+    --color-info: #17a2b8;
+    
+    /* Alias para compatibilidad */
+    --primary-pink: #e83e8c;
+    --primary-purple: #a8419f;
+    --light-purple: #f0e6f6;
+    --light-pink: #ffc0cb;
+    --light-bg: #fff5f7;
+    --lighter-pink: #fce4f0;
+    --lighter-purple: #f3e5f5;
+    
+    /* Fuentes */
+    --font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-size-base: 16px;
+    
+    /* Sombras */
+    --shadow-sm: 0 2px 4px rgba(232, 62, 140, 0.1);
+    --shadow-md: 0 4px 8px rgba(232, 62, 140, 0.15);
+    --shadow-lg: 0 8px 16px rgba(232, 62, 140, 0.2);
+}
+
+html, body {
+    height: 100%;
+    font-family: var(--font-primary);
+    color: var(--color-text);
+    background: linear-gradient(135deg, var(--color-light) 0%, #f0e6f6 100%);
+    line-height: 1.6;
+}
+
+/* ========== TIPOGRAFÍA ========== */
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-primario);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+p {
+    margin-bottom: 1rem;
+    color: var(--color-text);
+}
+
+a {
+    color: var(--color-primario);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: var(--color-secundario);
+    text-decoration: underline;
+}
+
+/* ========== BOTONES ========== */
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+    background: var(--color-light);
+    color: var(--color-primario);
+    border: 2px solid var(--color-primario);
+}
+
+.btn-secondary:hover {
+    background: var(--color-primario);
+    color: white;
+}
+
+.btn-success {
+    background: var(--color-success);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #218838;
+}
+
+.btn-danger {
+    background: var(--color-danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+.btn-pink {
+    background: linear-gradient(135deg, #e83e8c, #ff69b4);
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.btn-pink:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, #ff69b4, #e83e8c);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--color-primario);
+    border: 2px solid var(--color-primario);
+    box-shadow: none;
+}
+
+.btn-outline:hover {
+    background: var(--color-primario);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* ========== TARJETAS (CARDS) ========== */
+
+.card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(232, 62, 140, 0.1);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--color-terciario) 0%, rgba(232, 62, 140, 0.1) 100%);
+    padding: 1.5rem;
+    border-bottom: 2px solid var(--color-primario);
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card-title {
+    color: var(--color-primario);
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-text {
+    color: var(--color-text-light);
+    font-size: 0.95rem;
+}
+
+/* ========== FORMULARIOS ========== */
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-primario);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid rgba(232, 62, 140, 0.2);
+    border-radius: 8px;
+    font-size: var(--font-size-base);
+    font-family: var(--font-primary);
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 3px rgba(232, 62, 140, 0.1);
+}
+
+.form-control::placeholder {
+    color: var(--color-text-light);
+}
+
+.form-control:disabled {
+    background: #f5f5f5;
+    color: var(--color-text-light);
+    cursor: not-allowed;
+}
+
+select.form-control {
+    cursor: pointer;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* ========== ALERTA ========== */
+
+.alert {
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid;
+}
+
+.alert-success {
+    background: #d4edda;
+    border-color: var(--color-success);
+    color: #155724;
+}
+
+.alert-danger {
+    background: #f8d7da;
+    border-color: var(--color-danger);
+    color: #721c24;
+}
+
+.alert-warning {
+    background: #fff3cd;
+    border-color: var(--color-warning);
+    color: #856404;
+}
+
+.alert-info {
+    background: #d1ecf1;
+    border-color: var(--color-info);
+    color: #0c5460;
+}
+
+/* ========== NAVEGACIÓN ========== */
+
+nav {
+    background: linear-gradient(135deg, white 0%, var(--color-light) 100%);
+    box-shadow: var(--shadow-md);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+nav li {
+    margin-right: 2rem;
+}
+
+nav a {
+    font-weight: 600;
+    color: var(--color-text);
+    padding: 0.5rem 0;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+nav a:hover,
+nav a.active {
+    color: var(--color-primario);
+    border-bottom-color: var(--color-primario);
+}
+
+/* ========== CONTENEDOR Y LAYOUT ========== */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.row {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.col {
+    flex: 1;
+    min-width: 300px;
+}
+
+.col-12 { width: 100%; }
+.col-6 { flex: 0 0 calc(50% - 1rem); }
+.col-4 { flex: 0 0 calc(33.33% - 1.5rem); }
+.col-3 { flex: 0 0 calc(25% - 1.5rem); }
+
+/* ========== TABLA ========== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+thead {
+    background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
+    color: white;
+}
+
+th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(232, 62, 140, 0.1);
+}
+
+tbody tr:hover {
+    background: var(--color-light);
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ========== BADGE ========== */
+
+.badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.badge-primary {
+    background: var(--color-primario);
+    color: white;
+}
+
+.badge-secondary {
+    background: var(--color-light);
+    color: var(--color-primario);
+}
+
+.badge-success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.badge-warning {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.badge-danger {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* ========== GRID DE MASCOTAS ========== */
+
+.pets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.pet-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.pet-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.pet-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    background: linear-gradient(135deg, var(--color-light) 0%, var(--color-terciario) 100%);
+}
+
+.pet-info {
+    padding: 1.5rem;
+}
+
+.pet-name {
+    color: var(--color-primario);
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.pet-details {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+}
+
+.pet-details p {
+    margin-bottom: 0.5rem;
+}
+
+/* ========== PAGINACIÓN ========== */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 2rem 0;
+}
+
+.pagination a,
+.pagination span {
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    border: 2px solid var(--color-primario);
+    color: var(--color-primario);
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+    background: var(--color-primario);
+    color: white;
+}
+
+.pagination .current {
+    background: var(--color-primario);
+    color: white;
+    border-color: var(--color-primario);
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 768px) {
+    h1 { font-size: 1.75rem; }
+    h2 { font-size: 1.5rem; }
+    
+    .col-6 { flex: 0 0 100%; }
+    .col-4 { flex: 0 0 100%; }
+    .col-3 { flex: 0 0 100%; }
+    
+    nav ul {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    nav li {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .pets-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ========== FOOTER ========== */
+
+footer {
+    background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
+    color: white;
+    padding: 3rem 1rem;
+    text-align: center;
+    margin-top: 3rem;
+}
+
+footer a {
+    color: white;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* ========== PÁGINA PRINCIPAL ========== */
+
+.hero {
+    text-align: center;
+    padding: 4rem 1rem;
+    background: linear-gradient(135deg, rgba(232, 62, 140, 0.1) 0%, rgba(168, 65, 159, 0.05) 100%);
+    border-radius: 20px;
+    margin-bottom: 3rem;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: var(--color-text-light);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.section {
+    padding: 3rem 2rem;
+    margin-bottom: 3rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: var(--shadow-sm);
+}
+
+.section h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.roles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.role-card {
+    background: linear-gradient(135deg, var(--lighter-pink) 0%, white 100%);
+    padding: 2rem;
+    border-radius: 15px;
+    border: 2px solid rgba(232, 62, 140, 0.1);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.role-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-primario);
+}
+
+.role-card h3 {
+    color: var(--color-primario);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.role-card p {
+    color: var(--color-text-light);
+    line-height: 1.6;
+}
+
+.mascotas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.mascota-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(232, 62, 140, 0.1);
+}
+
+.mascota-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.mascota-info {
+    padding: 1.5rem;
+}
+
+.mascota-info h3 {
+    color: var(--color-primario);
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.mascota-info p {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin: 0.5rem 0;
+}
+
+.servicio-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    border: 2px solid rgba(232, 62, 140, 0.1);
+    transition: all 0.3s ease;
+}
+
+.servicio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-primario);
+}
+
+.servicio-card h3 {
+    color: var(--color-primario);
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.servicio-card p {
+    color: var(--color-text-light);
+    line-height: 1.6;
+}
+
+.badge {
+    display: inline-block;
+    background: var(--color-primario);
+    color: white;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.fade-in {
+    animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========== ANIMACIONES ALEGRES ========== */
+
+/* Bounce suave para botones */
+@keyframes bounce-soft {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.btn:hover {
+    animation: bounce-soft 0.6s ease;
+}
+
+/* Entrada de página */
+@keyframes slideInFromTop {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section {
+    animation: slideInFromTop 0.6s ease;
+}
+
+/* Entrada lateral de tarjetas */
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.role-card, .mascota-card, .servicio-card {
+    animation: slideInFromLeft 0.5s ease;
+}
+
+/* Pulso para elementos interactivos */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.btn-primary:hover, .btn-pink:hover, .badge:hover {
+    animation: pulse 0.4s ease;
+}
+
+/* Latido de corazón para mascotas favoritas */
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    10%, 20% {
+        transform: scale(0.95);
+    }
+    30%, 60% {
+        transform: scale(1);
+    }
+    40%, 80% {
+        transform: scale(1.05);
+    }
+}
+
+.favorite:hover {
+    animation: heartbeat 0.6s ease;
+}
+
+/* Rotación suave */
+@keyframes spin-slow {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading {
+    animation: spin-slow 2s linear infinite;
+}
+
+/* Brillo intermitente */
+@keyframes shimmer {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.shimmer-effect {
+    animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Entrada de formulario */
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.form-control {
+    animation: slideInFromRight 0.5s ease;
+}
+
+/* Vibración suave de error */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.form-control.error {
+    animation: shake 0.3s ease;
+}
+
+/* Glow - Brillo resplandeciente */
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(232, 62, 140, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(232, 62, 140, 0.6);
+    }
+}
+
+.focus-glow:focus {
+    animation: glow 1.5s ease-in-out infinite;
+}
+
+/* Movimiento ondulante */
+@keyframes wave {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.wave-animation {
+    animation: wave 1.5s ease-in-out infinite;
+}
+
+/* Zoom entrada */
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal, .popup {
+    animation: zoomIn 0.3s ease;
+}
+
+/* Parpadeo suave */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.blink-effect {
+    animation: blink 1s ease-in-out infinite;
+}
+
+/* Rotación de icono */
+@keyframes rotate-icon {
+    from { transform: rotate(0deg) scale(1); }
+    to { transform: rotate(360deg) scale(1.2); }
+}
+
+.icon-rotate:hover {
+    animation: rotate-icon 0.6s ease;
+}
+
+/* Movimiento flotante suave */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.float-animation {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Estrellas destellantes */
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+.star, .twinkle {
+    animation: twinkle 1.5s ease-in-out infinite;
+}
+
+/* Desvanecimiento suave */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.fade-out {
+    animation: fadeOut 0.6s ease;
+}
+
+/* Animación de éxito (checkmark) */
+@keyframes checkmark-bounce {
+    0% { transform: scale(0) rotate(-45deg); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1) rotate(0); }
+}
+
+.success-animation {
+    animation: checkmark-bounce 0.6s ease;
+}
+
+/* Transición suave de color de fondo */
+@keyframes bg-gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.gradient-shift {
+    background: linear-gradient(-45deg, var(--color-primario), var(--color-secundario), var(--color-terciario), var(--color-primario));
+    background-size: 400% 400%;
+    animation: bg-gradient-shift 15s ease infinite;
+}
+
+/* Animación 3D flip */
+@keyframes flip-3d {
+    from {
+        transform: perspective(400px) rotateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: perspective(400px) rotateY(360deg);
+        opacity: 1;
+    }
+}
+
+.flip-card:hover {
+    animation: flip-3d 0.6s ease;
+}
+
+/* Rainbow animado */
+@keyframes rainbow {
+    0% { color: #e83e8c; }
+    20% { color: #a8419f; }
+    40% { color: #ff69b4; }
+    60% { color: #ff1493; }
+    80% { color: #c71585; }
+    100% { color: #e83e8c; }
+}
+
+.rainbow-text {
+    animation: rainbow 3s linear infinite;
+    font-weight: bold;
+}
+
+/* Efecto de escritura */
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+.typing-effect {
+    overflow: hidden;
+    border-right: 2px solid var(--color-primario);
+    white-space: nowrap;
+    animation: typing 3.5s steps(40, end);
+}
+
+/* Clase para desactivar animaciones en mobile */
+@media (max-width: 768px) {
+    .btn:hover {
+        animation: none;
+    }
+    
+    .role-card:hover, .mascota-card:hover, .servicio-card:hover {
+        animation: none;
+    }
+    
+    .wave-animation, .float-animation, .gradient-shift {
+        animation: none;
+    }
+}

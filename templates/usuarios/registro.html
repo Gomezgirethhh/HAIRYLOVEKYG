@@ -1,0 +1,501 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Registro - Hairy Love{% endblock %}
+
+{% block extra_css %}
+    <style>
+        .registro-section {
+            min-height: auto;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, var(--lighter-pink), var(--lighter-purple));
+        }
+
+        .registro-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(106, 10, 173, 0.2);
+        }
+
+        .registro-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .registro-header img {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+
+        .registro-header h1 {
+            font-size: 2rem;
+            color: var(--primary-purple);
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .tipo-usuarios {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .tipo-btn {
+            padding: 20px;
+            border: 3px solid var(--light-gray);
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .tipo-btn:hover,
+        .tipo-btn.active {
+            border-color: var(--primary-pink);
+            background: linear-gradient(135deg, var(--lighter-pink), var(--lighter-purple));
+            color: var(--primary-purple);
+            transform: translateY(-3px);
+        }
+
+        .tipo-btn i {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .form-input-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-input-group label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-input-group input,
+        .form-input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input-group input:focus,
+        .form-input-group select:focus {
+            outline: none;
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px rgba(106, 10, 173, 0.1);
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary-purple), var(--light-purple));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(106, 10, 173, 0.3);
+        }
+
+        .register-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .register-footer p {
+            color: var(--gray-dark);
+            margin: 10px 0;
+        }
+
+        .register-footer a {
+            color: var(--primary-pink);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .register-footer a:hover {
+            color: var(--primary-purple);
+        }
+
+        .password-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-group input {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.password-group i:first-child {
+    position: absolute;
+    left: 12px;
+    color: #646262;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #888;
+}
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="registro-section">
+        <div class="registro-container">
+            <div class="registro-header">
+                <img src="{% static 'images/Hairylove.png' %}" alt="Hairy Love">
+                <h1>💜 Crear Cuenta</h1>
+                <p>Elige tu rol y únete a nuestra comunidad</p>
+            </div>
+           
+
+            <!-- SELECCIONAR TIPO DE USUARIO -->
+            <div class="tipo-usuarios" id="tipo-usuarios">
+                <button type="button" class="tipo-btn active" data-tipo="propietario"  onclick="event.preventDefault(); seleccionarTipo('Propietario')">
+                    <i class="fas fa-home"></i>
+                    Propietario
+                </button>
+                <button type="button" class="tipo-btn" data-tipo="criador" onclick="event.preventDefault(); seleccionarTipo('Criador')">
+                    <i class="fas fa-heart"></i>
+                    Criador
+                </button>
+                <button type="button" class="tipo-btn" data-tipo="especialista" onclick="event.preventDefault(); seleccionarTipo('Especialista')">
+                    <i class="fas fa-stethoscope"></i>
+                    Especialista
+                </button>
+            </div>
+
+            <!-- Tipo de documento -->
+           <div class="form-input-group">
+           <label>Tipo de documento</label>
+           <select name="tipo_documento" required>
+           <option value="">Selecciona</option>
+           <option value="cc">Cédula de Ciudadanía</option>
+           <option value="ce">Cédula de Extranjería</option>
+            <option value="pasaporte">Pasaporte</option>
+            </select>
+            </div>
+
+            <!-- Número de documento -->
+            <div class="form-input-group">
+    <i class="fas fa-id-card"></i>
+    <input type="text" name="numero_documento" placeholder="Número de documento" required>
+</div>
+           
+
+
+            <!-- FORMULARIO UNIVERSAL -->
+            <form method="POST" id="registro-form">
+                {% csrf_token %}
+
+                <input type="hidden" name="tipo" id="tipo-input" value="Propietario">
+
+                <!-- DATOS BÁSICOS (Todos) -->
+                <div class="form-row full">
+                    <div class="form-input-group">
+                        <label for="nombre"><i class="fas fa-user"></i> Nombre</label>
+                        <input type="text" name="nombre" id="nombre" placeholder="Tu nombre" required>
+                    </div>
+                </div>
+
+                <div class="form-row full">
+                    <div class="form-input-group">
+                        <label for="apellido"><i class="fas fa-user"></i> Apellido</label>
+                        <input type="text" name="apellido" id="apellido" placeholder="Tu apellido" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-input-group">
+                        <label for="correo"><i class="fas fa-envelope"></i> Correo</label>
+                        <input type="email" name="correo" id="correo" placeholder="tu@email.com" required>
+                    </div>
+                    <div class="form-input-group">
+                        <label for="telefono"><i class="fas fa-phone"></i> Teléfono</label>
+                        <input type="tel" name="telefono" id="telefono" placeholder="+57 3001234567" required>
+                    </div>
+                </div>
+
+                <div class="form-row full">
+                    <div class="form-input-group">
+                        <label for="direccion"><i class="fas fa-map-marker-alt"></i> Dirección</label>
+                        <input type="text" name="direccion" id="direccion" placeholder="Tu dirección" required>
+                    </div>
+                </div>
+
+                <!-- Contraseña -->
+<div class="form-input-group password-group">
+    <i class="fas fa-lock"></i>
+    <input type="password" name="password" id="password" placeholder="Contraseña segura" required>
+    <i class="fas fa-eye toggle-password" onclick="togglePassword('password', this)"></i>
+</div>
+
+<!-- Confirmar contraseña -->
+<div class="form-input-group password-group">
+    <i class="fas fa-lock"></i>
+    <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirmar contraseña" required>
+    <i class="fas fa-eye toggle-password" onclick="togglePassword('confirm_password', this)"></i>
+</div>
+
+                <!-- DATOS ESPECIALISTA -->
+                <div class="form-row full" id="especialidad-group" style="display: none;">
+                    <div class="form-input-group">
+                        <label for="especialidad"><i class="fas fa-briefcase"></i> Especialidad</label>
+                        <select name="especialidad" id="especialidad">
+                            <option value="">-- Selecciona --</option>
+                            <option value="Veterinaria">Veterinaria</option>
+                            <option value="Peluquería">Peluquería Canina</option>
+                            <option value="Guardería">Guardería</option>
+                            <option value="Entrenamiento">Adiestramiento</option>
+                            <option value="Nutrición">Nutrición</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- DATOS CRIADOR -->
+                <div class="form-row full" id="tipo-criador-group" style="display: none;">
+                    <div class="form-input-group">
+                        <label for="tipo-criador"><i class="fas fa-building"></i> Tipo de Criador</label>
+                        <select name="tipo_criador" id="tipo-criador">
+                            <option value="">-- Selecciona --</option>
+                            <option value="Refugio">Refugio</option>
+                            <option value="Particular">Particular</option>
+                            <option value="Protectora">Protectora</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="register-btn">
+                    <i class="fas fa-user-check"></i> Crear Cuenta
+                </button>
+            </form>
+
+            <div class="register-footer">
+                <p>¿Ya tienes cuenta?</p>
+                <a href="{% url 'login' %}">
+                    <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function seleccionarTipo(tipo) {
+            // Actualizar botones
+            document.querySelectorAll('.tipo-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-tipo="${tipo.toLowerCase()}"]`).classList.add('active');
+
+            // Actualizar input oculto
+            document.getElementById('tipo-input').value = tipo;
+
+            // Mostrar/ocultar campos específicos
+            document.getElementById('especialidad-group').style.display = 
+                tipo === 'Especialista' ? 'block' : 'none';
+            document.getElementById('tipo-criador-group').style.display = 
+                tipo === 'Criador' ? 'block' : 'none';
+        }
+    </script>
+{% endblock %}
+
+<label>Nombre</label>
+<input type="text" name="nombre" required>
+
+<label>Apellidos</label>
+<input type="text" name="apellido">
+
+<label>Fecha de nacimiento</label>
+<input type="date" name="fecha_de_nacimiento">
+
+<label>Correo electrónico</label>
+<input type="email" name="correo" required>
+
+<label>Teléfono</label>
+<input type="text" name="telefono" required>
+
+<label>Especialidad</label>
+<select name="especialidad">
+<option>PASEADOR_DE_MASCOTAS</option>
+<option>VETERINARIO</option>
+<option>GUARDERIA</option>
+<option>BAÑO_Y_PELUQUERIA</option>
+<option>ENTRENAMIENTO</option>
+<option>TERAPIA_DE_COMPAÑIA</option>
+</select>
+
+<label>Certificado especialista</label>
+<input type="file" name="certificado_especialista">
+
+<label>Dirección</label>
+<input type="text" name="direccion">
+
+<label>Contraseña</label>
+<input type="password" name="password">
+
+<button class="submit-btn">Registrar Especialista</button>
+
+</form>
+
+<!-- CRIADOR -->
+<form id="form-criador" method="POST" action="{% url 'registro' %}">
+{% csrf_token %}
+
+<input type="hidden" name="tipo" value="criador">
+
+<label>Tipo Criador</label>
+<select name="tipo_criador">
+<option value="REFUGIO">REFUGIO</option>
+<option value="PARTICULAR">PARTICULAR</option>
+<option value="PROTECTORA">PROTECTORA</option>
+</select>
+
+<label>Nombre</label>
+<input type="text" name="nombre" required>
+
+<label>Apellidos</label>
+<input type="text" name="apellido">
+
+<label>Fecha de Nacimiento</label>
+<input type="date" name="fecha_de_nacimiento">
+
+<label>Correo Electrónico</label>
+<input type="email" name="correo" required>
+
+<label>Teléfono</label>
+<input type="text" name="telefono" required>
+
+<label>Tipo de Identificación</label>
+<select name="tipo_de_identificacion">
+<option value="CC">CC</option>
+<option value="CEDULA_EXTRANJERA">CÉDULA EXTRANJERA</option>
+<option value="PASAPORTE">PASAPORTE</option>
+</select>
+
+<label>Número de Documento</label>
+<input type="text" name="numero_de_identificacion" required>
+
+<label>Nombre del Refugio o Protectora</label>
+<input type="text" name="nombre_refugio" placeholder="Opcional">
+
+<label>Dirección</label>
+<input type="text" name="direccion" required>
+
+<label>Contraseña</label>
+<input type="password" name="password" required>
+
+<label>Confirmar Contraseña</label>
+<input type="password" name="password_confirmation" required>
+
+<button class="submit-btn">Registrar Criador</button>
+
+</form>
+
+<!-- PROPIETARIO -->
+<form id="form-propietario" method="POST" action="{% url 'registro' %}">
+{% csrf_token %}
+
+<input type="hidden" name="tipo" value="propietario">
+
+<label>Nombre</label>
+<input type="text" name="nombre" required>
+
+<label>Apellidos</label>
+<input type="text" name="apellido">
+
+<label>Fecha de Nacimiento</label>
+<input type="date" name="fecha_de_nacimiento">
+
+<label>Correo electrónico</label>
+<input type="email" name="correo" required>
+
+<label>Teléfono</label>
+<input type="text" name="telefono" required>
+
+<label>Tipo de identificación</label>
+<select name="tipo_de_identificacion">
+<option value="CC">CC</option>
+<option value="CEDULA_EXTRANJERA">CÉDULA EXTRANJERA</option>
+<option value="PASAPORTE">PASAPORTE</option>
+</select>
+
+<label>Número de documento</label>
+<input type="text" name="numero_de_identificacion" required>
+
+<label>Dirección</label>
+<input type="text" name="direccion" required>
+
+<label>Contraseña</label>
+<input type="password" name="password" required>
+
+<label>Confirmar Contraseña</label>
+<input type="password" name="password_confirmation" required>
+
+<button class="submit-btn">Registrar Propietario</button>
+
+</form>
+
+<div class="login-link">
+<span>¿Ya tienes cuenta?</span>
+<a href="{% url 'login' %}">Iniciar sesión</a>
+</div>
+
+</div>
+
+<script>
+
+function mostrarFormulario(tipo){
+
+document.getElementById("form-especialista").classList.remove("active");
+document.getElementById("form-criador").classList.remove("active");
+document.getElementById("form-propietario").classList.remove("active");
+
+document.getElementById("form-"+tipo).classList.add("active");
+
+}
+
+</script>
+
+</body>
+</html>

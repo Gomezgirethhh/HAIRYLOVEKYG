@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Especialista | Hairy Love</title>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #FFFFFF;
+        }
+
+        .navbar {
+            background: #6a0dad;
+            padding: 1rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .specialist-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .profile-card, .dashboard-section {
+            border: 2px solid #6a0dad;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .btn {
+            padding: 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary { background: purple; color: white; }
+        .btn-success { background: green; color: white; }
+        .btn-danger { background: red; color: white; }
+
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div><strong>Hairy Love</strong></div>
+
+    <div>
+        {{ request.user.first_name }} {{ request.user.last_name }}
+        <a href="{% url 'logout' %}" style="color:white;">Cerrar sesión</a>
+    </div>
+</div>
+
+<div class="specialist-container">
+
+    <!-- PERFIL -->
+    <div class="profile-card">
+
+        <img src="{{ especialista.foto}}" width="120" style="border-radius:50%;">
+
+        <form action="{% url 'actualizar_foto' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="foto_perfil_esp">
+            <button type="submit">Actualizar</button>
+        </form>
+
+        <h2>{{ request.user.nombre }} {{request.user.apellido}}</h2>
+        <p>{{ especialista.descripcion }}</p>
+
+        <p><strong>Clientes:</strong> {{ especialista.clientes }}</p>
+        <p><strong>Rating:</strong> {{ especialista.rating }}</p>
+
+        <a href="{% url 'editar_perfil' %}" class="btn btn-primary">✏️ Editar Perfil</a>
+    </div>
+
+    <!-- CONTENIDO -->
+    <div>
+
+        <!-- SOLICITUDES -->
+        <div class="dashboard-section">
+            <h3>Solicitudes</h3>
+
+            {% for solicitud in solicitudes %}
+            <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+
+                <strong>{{ solicitud.cliente }}</strong><br>
+                Mascota: {{ solicitud.mascota }}<br>
+                Servicio: {{ solicitud.servicio }}<br>
+                Fecha: {{ solicitud.fecha }}<br>
+                Precio: {{ solicitud.precio }}
+
+                <p>{{ solicitud.mensaje }}</p>
+
+                <button class="btn btn-success">Aceptar</button>
+                <button class="btn btn-danger">Rechazar</button>
+
+            </div>
+            {% empty %}
+                <p>No hay solicitudes</p>
+            {% endfor %}
+        </div>
+
+        <!-- SERVICIOS -->
+        <div class="dashboard-section">
+            <h3>
+                Servicios
+                <a href="{% url 'formularioServicios' %}">
+                    <button>+ Nuevo</button>
+                </a>
+            </h3>
+
+            {% for servicio in servicios %}
+            <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+                <h4>{{ servicio.nombre }}</h4>
+                <p>{{ servicio.descripcion }}</p>
+                <strong>${{ servicio.precio }}</strong>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- DISPONIBILIDAD -->
+        <div class="dashboard-section">
+            <h3>Disponibilidad</h3>
+
+            <table border="1" width="100%">
+                <tr>
+                    <th>Hora</th>
+                    <th>Lun</th>
+                    <th>Mar</th>
+                    <th>Mié</th>
+                </tr>
+
+                <tr>
+                    <td>9-12</td>
+                    <td>Disponible</td>
+                    <td>No disponible</td>
+                    <td>Disponible</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- HISTORIAL -->
+        <div class="dashboard-section">
+            <h3>Historial</h3>
+
+            {% for h in historial %}
+            <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+                Cliente: {{ h.cliente }}<br>
+                Servicio: {{ h.servicio }}<br>
+                Estado: {{ h.estado }}
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+window.addEventListener("pageshow", function (event) {
+    if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+        window.location.href = "{% url 'index' %}";
+    }
+});
+</script>
+
+</body>
+</html>

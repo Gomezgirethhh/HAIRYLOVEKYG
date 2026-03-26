@@ -1,0 +1,470 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Verificar Código - Hairy Love{% endblock %}
+
+{% block content %}
+<style>
+    .verify-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f5e6e1 0%, #f0dce6 100%);
+        padding: 20px;
+    }
+
+    .verify-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(232, 62, 140, 0.15);
+        padding: 40px;
+        max-width: 500px;
+        width: 100%;
+        animation: slideInFromTop 0.6s ease-out;
+    }
+
+    .verify-icon {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .verify-icon i {
+        font-size: 60px;
+        color: #e83e8c;
+        animation: bounce-soft 2s infinite;
+    }
+
+    .verify-title {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 700;
+        color: #2d3436;
+        margin-bottom: 10px;
+        background: linear-gradient(135deg, #e83e8c, #a8419f);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .verify-subtitle {
+        text-align: center;
+        color: #636e72;
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: #2d3436;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        font-family: 'Courier New', monospace;
+    }
+
+    .codigo-input {
+        text-align: center;
+        letter-spacing: 8px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #e83e8c;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #e83e8c;
+        box-shadow: 0 0 0 3px rgba(232, 62, 140, 0.1);
+    }
+
+    .password-strength {
+        margin-top: 10px;
+        height: 4px;
+        background: #e0e0e0;
+        border-radius: 2px;
+        overflow: hidden;
+    }
+
+    .strength-bar {
+        height: 100%;
+        width: 0%;
+        transition: width 0.3s ease;
+    }
+
+    .strength-text {
+        font-size: 12px;
+        margin-top: 5px;
+        color: #636e72;
+    }
+
+    .requirements-checklist {
+        background: #f7f7f7;
+        border-left: 4px solid #e83e8c;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 13px;
+    }
+
+    .requirement {
+        display: flex;
+        align-items: center;
+        margin: 8px 0;
+        color: #636e72;
+    }
+
+    .requirement i {
+        width: 20px;
+        display: inline-flex;
+        justify-content: center;
+        margin-right: 8px;
+        color: #d63031;
+    }
+
+    .requirement.met i {
+        color: #27ae60;
+    }
+
+    .requirement.met {
+        color: #27ae60;
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 37px;
+        cursor: pointer;
+        color: #636e72;
+        font-size: 16px;
+    }
+
+    .password-section {
+        position: relative;
+        margin-bottom: 15px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #e83e8c, #a8419f);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(232, 62, 140, 0.3);
+    }
+
+    .submit-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .info-box {
+        background: #e8f4f8;
+        border-left: 4px solid #00a8cc;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 13px;
+        color: #0066cc;
+    }
+
+    .info-box i {
+        margin-right: 8px;
+    }
+
+    .error-message {
+        color: #d63031;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    @media (max-width: 480px) {
+        .verify-card {
+            padding: 25px;
+        }
+
+        .verify-icon i {
+            font-size: 50px;
+        }
+
+        .verify-title {
+            font-size: 22px;
+        }
+    }
+
+    @keyframes slideInFromTop {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes bounce-soft {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+</style>
+
+<div class="verify-container">
+    <div class="verify-card">
+        <!-- Icono -->
+        <div class="verify-icon">
+            <i class="fas fa-lock"></i>
+        </div>
+
+        <!-- Título -->
+        <h1 class="verify-title">Verifica tu Código</h1>
+        <p class="verify-subtitle">Ingresa el código que recibiste en tu correo</p>
+
+        <!-- Info box -->
+        <div class="info-box">
+            <i class="fas fa-info-circle"></i>
+            Se ha enviado un código de 6 dígitos a tu correo. Este código expirará en 15 minutos.
+        </div>
+
+        <!-- Mensajes -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Formulario -->
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- Campo de Código -->
+            <div class="form-group">
+                <label for="codigo"><i class="fas fa-key"></i> Código de Verificación</label>
+                <input 
+                    type="text" 
+                    id="codigo" 
+                    name="codigo" 
+                    class="codigo-input"
+                    placeholder="000000"
+                    maxlength="6"
+                    pattern="[0-9]{6}"
+                    required
+                    autofocus
+                >
+            </div>
+
+            <!-- Línea separadora -->
+            <hr style="margin: 30px 0; color: #e0e0e0;">
+
+            <!-- Nueva Contraseña -->
+            <div class="form-group">
+                <label for="nueva_contrasena"><i class="fas fa-lock"></i> Nueva Contraseña</label>
+                <div class="password-section">
+                    <input 
+                        type="password" 
+                        id="nueva_contrasena" 
+                        name="nueva_contrasena" 
+                        required
+                        onkeyup="checkPasswordStrength()"
+                    >
+                    <span class="toggle-password" onclick="togglePassword('nueva_contrasena')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+
+                <!-- Barra de fortaleza -->
+                <div class="password-strength">
+                    <div class="strength-bar" id="strengthBar"></div>
+                </div>
+                <div class="strength-text">
+                    Fortaleza: <span id="strengthText">Muy débil</span>
+                </div>
+            </div>
+
+            <!-- Checklist de Requisitos -->
+            <div class="requirements-checklist">
+                <div class="requirement" id="req-length">
+                    <i class="fas fa-times"></i>
+                    <span>Al menos 8 caracteres</span>
+                </div>
+                <div class="requirement" id="req-upper">
+                    <i class="fas fa-times"></i>
+                    <span>Una letra mayúscula (A-Z)</span>
+                </div>
+                <div class="requirement" id="req-lower">
+                    <i class="fas fa-times"></i>
+                    <span>Una letra minúscula (a-z)</span>
+                </div>
+                <div class="requirement" id="req-number">
+                    <i class="fas fa-times"></i>
+                    <span>Un número (0-9)</span>
+                </div>
+                <div class="requirement" id="req-special">
+                    <i class="fas fa-times"></i>
+                    <span>Un carácter especial (!@#$...)</span>
+                </div>
+            </div>
+
+            <!-- Confirmar Contraseña -->
+            <div class="form-group">
+                <label for="confirmar_contrasena"><i class="fas fa-lock"></i> Confirmar Contraseña</label>
+                <div class="password-section">
+                    <input 
+                        type="password" 
+                        id="confirmar_contrasena" 
+                        name="confirmar_contrasena" 
+                        required
+                        onkeyup="checkPasswordMatch()"
+                    >
+                    <span class="toggle-password" onclick="togglePassword('confirmar_contrasena')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+                <div id="matchError" class="error-message"></div>
+            </div>
+
+            <!-- Botón Submit -->
+            <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                <i class="fas fa-check-circle"></i> Cambiar Contraseña
+            </button>
+        </form>
+
+        <!-- Link volver -->
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'solicitar_reset_contrasena' %}" style="color: #e83e8c; text-decoration: none; font-size: 13px;">
+                ¿No recibiste el código? Solicita uno nuevo
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Validar fortaleza de contraseña
+    function checkPasswordStrength() {
+        const password = document.getElementById('nueva_contrasena').value;
+        let strength = 0;
+        const requirements = {
+            'req-length': /.{8,}/.test(password),
+            'req-upper': /[A-Z]/.test(password),
+            'req-lower': /[a-z]/.test(password),
+            'req-number': /[0-9]/.test(password),
+            'req-special': /[!@#$%^&*()_+\-=\[\]{};:'"|,.<>/?]/.test(password)
+        };
+
+        // Actualizar UI de requisitos
+        Object.entries(requirements).forEach(([id, met]) => {
+            const elem = document.getElementById(id);
+            if (met) {
+                elem.classList.add('met');
+                strength++;
+            } else {
+                elem.classList.remove('met');
+            }
+        });
+
+        // Actualizar barra de fortaleza
+        const barWidth = (strength / 5) * 100;
+        const bar = document.getElementById('strengthBar');
+        bar.style.width = barWidth + '%';
+
+        // Actualizar color y texto
+        const strengthText = document.getElementById('strengthText');
+        const colors = ['#d63031', '#f39c12', '#f1c40f', '#27ae60', '#27ae60'];
+        const texts = ['Muy débil', 'Débil', 'Normal', 'Fuerte', 'Muy fuerte'];
+        bar.style.background = colors[strength];
+        strengthText.textContent = texts[strength];
+
+        checkFormValidity();
+    }
+
+    // Validar que las contraseñas coincidan
+    function checkPasswordMatch() {
+        const password = document.getElementById('nueva_contrasena').value;
+        const confirm = document.getElementById('confirmar_contrasena').value;
+        const errorDiv = document.getElementById('matchError');
+
+        if (confirm && password !== confirm) {
+            errorDiv.textContent = '❌ Las contraseñas no coinciden';
+        } else if (confirm && password === confirm) {
+            errorDiv.textContent = '✅ Las contraseñas coinciden';
+        } else {
+            errorDiv.textContent = '';
+        }
+
+        checkFormValidity();
+    }
+
+    // Validar que el formulario pueda enviarse
+    function checkFormValidity() {
+        const codigo = document.getElementById('codigo').value;
+        const password = document.getElementById('nueva_contrasena').value;
+        const confirm = document.getElementById('confirmar_contrasena').value;
+
+        // Requisitos
+        const hasLength = password.length >= 8;
+        const hasUpper = /[A-Z]/.test(password);
+        const hasLower = /[a-z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};:'"|,.<>/?]/.test(password);
+        const allRequirements = hasLength && hasUpper && hasLower && hasNumber && hasSpecial;
+        const passwordsMatch = password && confirm && password === confirm;
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = !(codigo.length === 6 && allRequirements && passwordsMatch);
+    }
+
+    // Toggle mostrar/ocultar contraseña
+    function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+        const icon = event.target.closest('i');
+
+        if (field.type === 'password') {
+            field.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            field.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+
+    // Permitir solo números en campo de código
+    document.getElementById('codigo').addEventListener('keypress', function(e) {
+        if (!/[0-9]/.test(e.key)) {
+            e.preventDefault();
+        }
+    });
+
+    // Validar en carga
+    checkFormValidity();
+</script>
+{% endblock %}

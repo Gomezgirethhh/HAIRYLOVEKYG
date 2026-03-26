@@ -1,0 +1,586 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Editar Perfil | Hairy Love{% endblock %}
+
+{% block extra_css %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(135deg, #f5e6ea 0%, #ffe8f0 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 40px;
+        animation: slideDown 0.6s ease-out;
+    }
+
+    .header h1 {
+        color: #e83e8c;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .header p {
+        color: #999;
+        font-size: 1.1em;
+    }
+
+    .edit-form-container {
+        background: white;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        animation: slideUp 0.6s ease-out;
+    }
+
+    .form-section {
+        margin-bottom: 40px;
+    }
+
+    .form-section h2 {
+        color: #e83e8c;
+        font-size: 1.5em;
+        margin-bottom: 20px;
+        border-bottom: 3px solid #FF6B9D;
+        padding-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        color: #a8419f;
+        font-weight: bold;
+        font-size: 0.95em;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-input,
+    .form-textarea {
+        padding: 12px 15px;
+        border: 2px solid #f0e6f0;
+        border-radius: 8px;
+        font-size: 1em;
+        transition: all 0.3s ease;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+        outline: none;
+        border-color: #FF6B9D;
+        box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+        background: #fff8fc;
+    }
+
+    .form-textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .form-help-text {
+        font-size: 0.85em;
+        color: #999;
+        margin-top: 5px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 40px;
+        justify-content: center;
+    }
+
+    .btn {
+        padding: 14px 40px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1em;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .btn-guardar {
+        background: linear-gradient(135deg, #FF6B9D 0%, #e83e8c 100%);
+        color: white;
+        flex: 1;
+    }
+
+    .btn-guardar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(232, 62, 140, 0.3);
+    }
+
+    .btn-cancelar {
+        background: #f0e6f0;
+        color: #a8419f;
+        flex: 1;
+        border: 2px solid #FF6B9D;
+    }
+
+    .btn-cancelar:hover {
+        background: #a8419f;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .photo-upload {
+        border: 2px dashed #FF6B9D;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #fff8fc;
+    }
+
+    .photo-upload:hover {
+        background: #ffe8f0;
+        border-color: #e83e8c;
+    }
+
+    .photo-upload input[type="file"] {
+        display: none;
+    }
+
+    .photo-upload-text {
+        color: #a8419f;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .photo-upload-hint {
+        color: #999;
+        font-size: 0.85em;
+    }
+
+    .alert {
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border-left: 4px solid #28a745;
+    }
+
+    .alert-error {
+        background: #f8d7da;
+        color: #721c24;
+        border-left: 4px solid #dc3545;
+    }
+
+    .alert-info {
+        background: #d1ecf1;
+        color: #0c5460;
+        border-left: 4px solid #17a2b8;
+    }
+
+    .required-field::after {
+        content: " *";
+        color: #FF6B9D;
+        font-weight: bold;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-section:first-of-type .form-group:nth-child(5):nth-last-child(n+2) {
+        grid-column: 1 / -1;
+    }
+
+    @media (max-width: 768px) {
+        .header h1 {
+            font-size: 1.8em;
+        }
+
+        .edit-form-container {
+            padding: 20px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>✏️ Editar Perfil</h1>
+        <p>Actualiza tu información personal</p>
+    </div>
+
+    <!-- Mensajes -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Formulario -->
+    <div class="edit-form-container">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Sección 1: Información Personal -->
+            <div class="form-section">
+                <h2>👤 Información Personal</h2>
+                
+                <div class="form-grid">
+                    <!-- Nombre -->
+                    <div class="form-group">
+                        <label for="{{ form_usuario.nombre.id_for_label }}" class="required-field">
+                            {{ form_usuario.nombre.label }}
+                        </label>
+                        {{ form_usuario.nombre }}
+                        {% if form_usuario.nombre.errors %}
+                            <div class="alert alert-error">
+                                {{ form_usuario.nombre.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Apellido -->
+                    <div class="form-group">
+                        <label for="{{ form_usuario.apellido.id_for_label }}" class="required-field">
+                            {{ form_usuario.apellido.label }}
+                        </label>
+                        {{ form_usuario.apellido }}
+                        {% if form_usuario.apellido.errors %}
+                            <div class="alert alert-error">
+                                {{ form_usuario.apellido.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div class="form-group">
+                        <label for="{{ form_usuario.telefono.id_for_label }}">
+                            {{ form_usuario.telefono.label }}
+                        </label>
+                        {{ form_usuario.telefono }}
+                        {% if form_usuario.telefono.errors %}
+                            <div class="alert alert-error">
+                                {{ form_usuario.telefono.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Correo -->
+                    <div class="form-group">
+                        <label for="{{ form_usuario.correo.id_for_label }}" class="required-field">
+                            {{ form_usuario.correo.label }}
+                        </label>
+                        {{ form_usuario.correo }}
+                        {% if form_usuario.correo.errors %}
+                            <div class="alert alert-error">
+                                {{ form_usuario.correo.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Dirección -->
+                    <div class="form-group">
+                        <label for="{{ form_usuario.direccion.id_for_label }}">
+                            {{ form_usuario.direccion.label }}
+                        </label>
+                        {{ form_usuario.direccion }}
+                        {% if form_usuario.direccion.errors %}
+                            <div class="alert alert-error">
+                                {{ form_usuario.direccion.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Fecha de Nacimiento -->
+                    <div class="form-group">
+                        <label for="{{ form_usuario.fecha_nacimiento.id_for_label }}">
+                            {{ form_usuario.fecha_nacimiento.label }}
+                        </label>
+                        {{ form_usuario.fecha_nacimiento }}
+                        {% if form_usuario.fecha_nacimiento.errors %}
+                            <div class="alert alert-error">
+                                {{ form_usuario.fecha_nacimiento.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Foto de Perfil -->
+                    <div class="form-group">
+                        <label for="{{ form_usuario.foto_perfil.id_for_label }}">
+                            {{ form_usuario.foto_perfil.label }}
+                        </label>
+                        <div class="photo-upload" onclick="document.getElementById('id_foto_perfil').click();">
+                            <div class="photo-upload-text">📸 Seleccionar Foto</div>
+                            <div class="photo-upload-hint">Haz clic aquí o arrastra una imagen (JPG, PNG)</div>
+                        </div>
+                        {{ form_usuario.foto_perfil }}
+                        {% if form_usuario.foto_perfil.errors %}
+                            <div class="alert alert-error">
+                                {{ form_usuario.foto_perfil.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección 2: Información Específica del Usuario -->
+            {% if form_especifico %}
+            <div class="form-section">
+                {% if perfil_tipo == 'Criador' %}
+                    <h2>🐾 Información del Criador</h2>
+                    
+                    <div class="form-grid">
+                        <!-- Tipo de Criador -->
+                        <div class="form-group">
+                            <label for="{{ form_especifico.Tipo_Criador.id_for_label }}">
+                                {{ form_especifico.Tipo_Criador.label }}
+                            </label>
+                            {{ form_especifico.Tipo_Criador }}
+                            {% if form_especifico.Tipo_Criador.errors %}
+                                <div class="alert alert-error">
+                                    {{ form_especifico.Tipo_Criador.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Razón de Dar en Adopción -->
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="{{ form_especifico.Razon_Dar_Adopcion.id_for_label }}">
+                                {{ form_especifico.Razon_Dar_Adopcion.label }}
+                            </label>
+                            {{ form_especifico.Razon_Dar_Adopcion }}
+                            {% if form_especifico.Razon_Dar_Adopcion.errors %}
+                                <div class="alert alert-error">
+                                    {{ form_especifico.Razon_Dar_Adopcion.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Condiciones de Adopción -->
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="{{ form_especifico.Condiciones_Adopcion.id_for_label }}">
+                                {{ form_especifico.Condiciones_Adopcion.label }}
+                            </label>
+                            {{ form_especifico.Condiciones_Adopcion }}
+                            {% if form_especifico.Condiciones_Adopcion.errors %}
+                                <div class="alert alert-error">
+                                    {{ form_especifico.Condiciones_Adopcion.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Información de Rescate -->
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="{{ form_especifico.Informacion_Rescate.id_for_label }}">
+                                {{ form_especifico.Informacion_Rescate.label }}
+                            </label>
+                            {{ form_especifico.Informacion_Rescate }}
+                            {% if form_especifico.Informacion_Rescate.errors %}
+                                <div class="alert alert-error">
+                                    {{ form_especifico.Informacion_Rescate.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                {% elif perfil_tipo == 'Propietario' %}
+                    <h2>❤️ Información del Propietario</h2>
+                    
+                    <div class="form-grid">
+                        <!-- Preferencia de Mascota -->
+                        <div class="form-group">
+                            <label for="{{ form_especifico.Preferencia_Mascota.id_for_label }}">
+                                {{ form_especifico.Preferencia_Mascota.label }}
+                            </label>
+                            {{ form_especifico.Preferencia_Mascota }}
+                            <p class="form-help-text">Ej: Perros pequeños, Gatos, Animales exóticos</p>
+                            {% if form_especifico.Preferencia_Mascota.errors %}
+                                <div class="alert alert-error">
+                                    {{ form_especifico.Preferencia_Mascota.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                {% elif perfil_tipo == 'Especialista' %}
+                    <h2>🏥 Información del Especialista</h2>
+                    
+                    <div class="form-grid">
+                        <!-- Especialidad -->
+                        <div class="form-group">
+                            <label for="{{ form_especifico.Especialidad.id_for_label }}">
+                                {{ form_especifico.Especialidad.label }}
+                            </label>
+                            {{ form_especifico.Especialidad }}
+                            {% if form_especifico.Especialidad.errors %}
+                                <div class="alert alert-error">
+                                    {{ form_especifico.Especialidad.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Años de Experiencia -->
+                        <div class="form-group">
+                            <label for="{{ form_especifico.Años_Experiencia.id_for_label }}">
+                                {{ form_especifico.Años_Experiencia.label }}
+                            </label>
+                            {{ form_especifico.Años_Experiencia }}
+                            {% if form_especifico.Años_Experiencia.errors %}
+                                <div class="alert alert-error">
+                                    {{ form_especifico.Años_Experiencia.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Horario -->
+                        <div class="form-group">
+                            <label for="{{ form_especifico.Horario.id_for_label }}">
+                                {{ form_especifico.Horario.label }}
+                            </label>
+                            {{ form_especifico.Horario }}
+                            {% if form_especifico.Horario.errors %}
+                                <div class="alert alert-error">
+                                    {{ form_especifico.Horario.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Certificados -->
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="{{ form_especifico.Certificados.id_for_label }}">
+                                {{ form_especifico.Certificados.label }}
+                            </label>
+                            {{ form_especifico.Certificados }}
+                            {% if form_especifico.Certificados.errors %}
+                                <div class="alert alert-error">
+                                    {{ form_especifico.Certificados.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Acciones -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-guardar">
+                    💾 Guardar Cambios
+                </button>
+                <a href="{% if perfil_tipo == 'Criador' %}{% url 'criador' %}{% elif perfil_tipo == 'Propietario' %}{% url 'propietario' %}{% elif perfil_tipo == 'Especialista' %}{% url 'especialista' %}{% else %}{% url 'index' %}{% endif %}" class="btn btn-cancelar">
+                    ✕ Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Permitir drop de archivos en el área de carga
+    const photoUpload = document.querySelector('.photo-upload');
+    const fileInput = document.getElementById('id_foto_perfil');
+
+    photoUpload.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        photoUpload.style.background = '#ffe8f0';
+        photoUpload.style.borderColor = '#e83e8c';
+    });
+
+    photoUpload.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        photoUpload.style.background = '#fff8fc';
+        photoUpload.style.borderColor = '#FF6B9D';
+    });
+
+    photoUpload.addEventListener('drop', (e) => {
+        e.preventDefault();
+        photoUpload.style.background = '#fff8fc';
+        photoUpload.style.borderColor = '#FF6B9D';
+        
+        if (e.dataTransfer.files.length) {
+            fileInput.files = e.dataTransfer.files;
+        }
+    });
+
+    // Cambiar texto cuando se selecciona archivo
+    fileInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            photoUpload.querySelector('.photo-upload-text').textContent = '✓ Imagen seleccionada';
+            photoUpload.style.borderColor = '#28a745';
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Servicios para Mascotas - Hairy Love{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <h2><i class="fas fa-briefcase"></i> Servicios Profesionales para Mascotas</h2>
+        <p style="text-align: center; color: var(--gray-dark); font-size: 1.1rem; margin-bottom: 40px;">
+            Accede a especialistas certificados para el cuidado integral de tu mascota.
+            Desde veterinaria hasta peluquería, estamos aquí para ayudarte.
+        </p>
+
+        {% if servicios %}
+            <div class="servicios-grid">
+                {% for servicio in servicios %}
+                    <div class="servicio-card fade-in">
+                        <div style="background: linear-gradient(135deg, var(--lighter-pink), var(--lighter-purple)); height: 200px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem;">
+                            <i class="fas fa-stethoscope"></i>
+                        </div>
+                        <div class="servicio-info">
+                            <h3>{{ servicio.nombre_servicio }}</h3>
+                            
+                            <p style="margin: 15px 0;">
+                                <strong style="color: var(--primary-purple);">
+                                    <i class="fas fa-user-md"></i> Especialista:
+                                </strong>
+                                {% if servicio.especialista %}
+                                    {{ servicio.especialista.nombre }} {{ servicio.especialista.apellido }}
+                                {% else %}
+                                    Sin asignar
+                                {% endif %}
+                            </p>
+
+                            <p style="color: var(--gray-dark); text-align: justify; margin-bottom: 15px; min-height: 60px;">
+                                {{ servicio.descripcion|default:"Servicio profesional de calidad para tu mascota." }}
+                            </p>
+
+                            <div style="background: var(--light-gray); padding: 15px; border-radius: 10px; margin: 15px 0; text-align: center;">
+                                <p style="margin: 0; font-size: 0.9rem; color: var(--gray-dark);">
+                                    <strong><i class="fas fa-dollar-sign"></i> Precio Base</strong>
+                                </p>
+                                <p style="margin: 5px 0 0 0; font-size: 1.8rem; font-weight: 800; color: var(--primary-pink);">
+                                    ${{ servicio.precio_base|floatformat:0 }}
+                                </p>
+                            </div>
+
+                            {% if servicio.comision %}
+                                <p style="font-size: 0.85rem; color: var(--gray-dark); margin-bottom: 15px;">
+                                    <i class="fas fa-info-circle"></i> Comisión: {{ servicio.comision }}%
+                                </p>
+                            {% endif %}
+
+                            <a href="{% url 'index' %}" class="btn-primary" style="width: 100%; text-align: center; margin-top: 15px; display: block;">
+                                <i class="fas fa-calendar-check"></i> Solicitar Servicio
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 80px 20px; background: linear-gradient(135deg, var(--lighter-pink), var(--lighter-purple)); border-radius: 20px;">
+                <div style="font-size: 4rem; color: var(--primary-purple); margin-bottom: 20px;">
+                    <i class="fas fa-inbox"></i>
+                </div>
+                <h3 style="color: var(--dark); margin-bottom: 10px;">Aún no hay servicios disponibles</h3>
+                <p style="color: var(--gray-dark); margin-bottom: 30px;">
+                    Nuestros especialistas están preparando sus servicios. ¡Vuelve pronto!
+                </p>
+                <a href="{% url 'index' %}" class="btn-primary">
+                    <i class="fas fa-arrow-left"></i> Volver al inicio
+                </a>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- SECCIÓN DE ESPECIALIDADES -->
+    <section class="section" style="background: linear-gradient(135deg, var(--light-bg), var(--lighter-purple)); border-radius: 20px;">
+        <h2><i class="fas fa-star"></i> Tipos de Servicios que Ofrecemos</h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; margin-top: 40px;">
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(106, 10, 173, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.1)'">
+                <div style="font-size: 2.5rem; color: var(--primary-pink); margin-bottom: 15px;">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <h4>Consultas Veterinarias</h4>
+                <p style="color: var(--gray-dark);">Diagnóstico y tratamiento de enfermedades</p>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(106, 10, 173, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.1)'">
+                <div style="font-size: 2.5rem; color: var(--primary-pink); margin-bottom: 15px;">
+                    <i class="fas fa-cut"></i>
+                </div>
+                <h4>Peluquería Canina</h4>
+                <p style="color: var(--gray-dark);">Baños, cortes y arreglos personalizados</p>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(106, 10, 173, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.1)'">
+                <div style="font-size: 2.5rem; color: var(--primary-pink); margin-bottom: 15px;">
+                    <i class="fas fa-teeth"></i>
+                </div>
+                <h4>Odontología</h4>
+                <p style="color: var(--gray-dark);">Limpieza y cuidado dental especializado</p>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(106, 10, 173, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.1)'">
+                <div style="font-size: 2.5rem; color: var(--primary-pink); margin-bottom: 15px;">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <h4>Nutrición</h4>
+                <p style="color: var(--gray-dark);">Planes de alimentación personalizada</p>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(106, 10, 173, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.1)'">
+                <div style="font-size: 2.5rem; color: var(--primary-pink); margin-bottom: 15px;">
+                    <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <h4>Cuidado y Hospedaje</h4>
+                <p style="color: var(--gray-dark);">Alojamiento seguro y atención profesional</p>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(106, 10, 173, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.1)'">
+                <div style="font-size: 2.5rem; color: var(--primary-pink); margin-bottom: 15px;">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h4>Adiestramiento</h4>
+                <p style="color: var(--gray-dark);">Entrenamiento profesional y comportamiento</p>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

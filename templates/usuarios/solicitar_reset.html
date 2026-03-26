@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Recuperar Contraseña - Hairy Love{% endblock %}
+
+{% block extra_css %}
+<style>
+    .reset-container {
+        max-width: 500px;
+        margin: 4rem auto;
+        padding: 2rem;
+        background: linear-gradient(135deg, var(--lighter-pink), white);
+        border-radius: 20px;
+        box-shadow: var(--shadow-lg);
+        animation: slideInFromTop 0.6s ease;
+    }
+    
+    .reset-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .reset-header h2 {
+        color: #e83e8c;
+        margin-bottom: 0.5rem;
+    }
+    
+    .reset-header p {
+        color: var(--color-text-light);
+    }
+    
+    .reset-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        animation: bounce-soft 0.8s ease infinite;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #e83e8c;
+    }
+    
+    .form-group input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid rgba(232, 62, 140, 0.2);
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-group input:focus {
+        outline: none;
+        border-color: #e83e8c;
+        box-shadow: 0 0 10px rgba(232, 62, 140, 0.2);
+    }
+    
+    .submit-btn {
+        width: 100%;
+        padding: 0.85rem;
+        background: linear-gradient(135deg, #e83e8c, #a8419f);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(232, 62, 140, 0.3);
+    }
+    
+    .reset-body {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin-bottom: 1rem;
+    }
+    
+    .info-box {
+        background: rgba(232, 62, 140, 0.05);
+        border-left: 4px solid #e83e8c;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .info-box p {
+        margin: 0;
+        color: var(--color-text);
+        font-size: 0.95rem;
+    }
+    
+    .login-link {
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+    
+    .login-link a {
+        color: #e83e8c;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="reset-container">
+    <div class="reset-header">
+        <div class="reset-icon">🔑</div>
+        <h2>Recupera tu Contraseña</h2>
+        <p>Ingresa tu correo para recibir un código de verificación</p>
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" style="margin-bottom: 1rem; animation: slideInFromTop 0.5s ease;">
+                <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="reset-body">
+        <div class="info-box">
+            <p>
+                <i class="fas fa-info-circle" style="color: #e83e8c; margin-right: 0.5rem;"></i>
+                Te enviaremos un código de 6 dígitos a tu correo. Este código expirará en 15 minutos. Úsalo para crear tu nueva contraseña.
+            </p>
+        </div>
+        
+        <form method="POST" class="reset-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="correo"><i class="fas fa-envelope" style="color: #e83e8c; margin-right: 0.5rem;"></i>Correo Electrónico</label>
+                <input type="email" 
+                       id="correo" 
+                       name="correo" 
+                       placeholder="ejemplo@correo.com" 
+                       required
+                       autocomplete="email">
+            </div>
+            
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-paper-plane" style="margin-right: 0.5rem;"></i>
+                Enviar Enlace de Recuperación
+            </button>
+        </form>
+    </div>
+    
+    <div class="login-link">
+        <p>¿Recuerdas tu contraseña? <a href="{% url 'login' %}">Inicia sesión aquí</a></p>
+        <p>¿No tienes cuenta? <a href="{% url 'registro' %}">Regístrate ahora</a></p>
+    </div>
+</div>
+
+<script>
+    // Validar que el formulario no esté vacío
+    document.querySelector('.reset-form').addEventListener('submit', function(e) {
+        const correo = document.getElementById('correo').value.trim();
+        if (!correo) {
+            e.preventDefault();
+            alert('Por favor ingresa tu correo electrónico');
+        }
+    });
+</script>
+{% endblock %}

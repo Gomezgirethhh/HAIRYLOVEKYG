@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mascotas disponibles para adopción - Hairy Love{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <h2><i class="fas fa-paw"></i> Mascotas disponibles para adopción</h2>
+        <p style="text-align: center; color: var(--gray-dark); font-size: 1.1rem; margin-bottom: 40px;">
+            Encuentra tu compañero perfecto. Todas nuestras mascotas están verificadas y listas para un nuevo hogar.
+        </p>
+
+        {% if mascotas %}
+            <div class="mascotas-grid">
+                {% for mascota in mascotas %}
+                    <div class="mascota-card fade-in">
+                        <div style="background: linear-gradient(135deg, var(--lighter-pink), var(--lighter-purple)); height: 220px; display: flex; align-items: center; justify-content: center; font-size: 4rem;">
+                            {% if mascota.Especie == 'Perro' %}
+                                🐶
+                            {% elif mascota.Especie == 'Gato' %}
+                                🐱
+                            {% elif mascota.Especie == 'Conejo' %}
+                                🐰
+                            {% else %}
+                                🐾
+                            {% endif %}
+                        </div>
+                        <div class="mascota-info">
+                            <h3>{{ mascota.Nombre_Mascota }}</h3>
+                            
+                            <div style="margin: 10px 0;">
+                                <span class="badge">
+                                    <i class="fas fa-dna"></i> {{ mascota.Especie }}
+                                </span>
+                                <span class="badge">
+                                    <i class="fas fa-venus-mars"></i> {{ mascota.Genero }}
+                                </span>
+                                <span class="badge">
+                                    <i class="fas fa-ruler-vertical"></i> {{ mascota.Tamaño }}
+                                </span>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <p><strong><i class="fas fa-dna"></i> Raza:</strong> {{ mascota.Raza }}</p>
+                                <p><strong><i class="fas fa-weight"></i> Peso:</strong> {{ mascota.Peso }} kg</p>
+                                <p><strong><i class="fas fa-heartbeat"></i> Salud:</strong> 
+                                    <span style="color: {% if mascota.Estado_Salud == 'Excelente' %}#00c853{% elif mascota.Estado_Salud == 'Buena' %}#00a86b{% else %}#ff9100{% endif %}; font-weight: 600;">
+                                        {{ mascota.Estado_Salud }}
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div style="border-top: 1px solid var(--light-gray); padding-top: 10px; margin-top: 10px;">
+                                {% if mascota.Esterilizado %}
+                                    <p style="font-size: 0.85rem; color: #00c853;">
+                                        <i class="fas fa-check-circle"></i> Esterilizado/a
+                                    </p>
+                                {% endif %}
+                                {% if mascota.Socializado %}
+                                    <p style="font-size: 0.85rem; color: #00c853;">
+                                        <i class="fas fa-check-circle"></i> Socializado/a
+                                    </p>
+                                {% endif %}
+                            </div>
+
+                            <a href="{% url 'formulario_adopcion' %}" class="btn-primary" style="width: 100%; text-align: center; margin-top: 15px; display: block;">
+                                <i class="fas fa-heart"></i> Solicitar adopción
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 60px 20px;">
+                <div style="font-size: 4rem; color: var(--primary-pink); margin-bottom: 20px;">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3 style="color: var(--dark); margin-bottom: 10px;">No hay mascotas disponibles en este momento</h3>
+                <p style="color: var(--gray-dark); margin-bottom: 30px;">
+                    Por favor, revisa nuevamente pronto. Constantemente recibimos nuevas mascotas.
+                </p>
+                <a href="{% url 'index' %}" class="btn-primary">
+                    <i class="fas fa-arrow-left"></i> Volver al inicio
+                </a>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- SECCIÓN DE INFORMACIÓN -->
+    <section class="section" style="background: linear-gradient(135deg, var(--lighter-pink), var(--lighter-purple)); border-radius: 20px;">
+        <h2><i class="fas fa-info-circle"></i> Proceso de adopción</h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px;">
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <div style="font-size: 2rem; color: var(--primary-pink); margin-bottom: 15px;">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <h4>Selecciona tu mascota</h4>
+                <p>Explora nuestro catálogo y encuentra la que mejor se adapte a tu familia.</p>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <div style="font-size: 2rem; color: var(--primary-pink); margin-bottom: 15px;">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h4>Completa el formulario</h4>
+                <p>Proporciona información sobre tu hogar y tus hábitos para garantizar una buena compatibilidad.</p>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <div style="font-size: 2rem; color: var(--primary-pink); margin-bottom: 15px;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h4>Evaluación y aprobación</h4>
+                <p>Nuestro equipo realizará una evaluación para garantizar el bienestar de la mascota.</p>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <div style="font-size: 2rem; color: var(--primary-pink); margin-bottom: 15px;">
+                    <i class="fas fa-home"></i>
+                </div>
+                <h4>¡Llevar a casa!</h4>
+                <p>Una vez aprobada, ¡es hora de hacerla parte de tu familia y crear recuerdos inolvidables!</p>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

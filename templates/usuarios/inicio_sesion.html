@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Iniciar Sesión - Hairy Love{% endblock %}
+
+{% block extra_css %}
+    <style>
+        .login-section {
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--lighter-pink), var(--lighter-purple));
+        }
+
+        .login-container {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 15px 40px rgba(106, 10, 173, 0.2);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header img {
+            width: 120px;
+            margin-bottom: 20px;
+        }
+
+        .login-header h1 {
+            font-size: 2rem;
+            color: var(--primary-purple);
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .login-header p {
+            color: var(--gray-dark);
+        }
+
+        .form-input-group {
+            margin-bottom: 20px;
+        }
+
+        .form-input-group label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-input-group input,
+        .form-input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input-group input:focus,
+        .form-input-group select:focus {
+            outline: none;
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px rgba(106, 10, 173, 0.1);
+        }
+
+        .form-input-group input::placeholder {
+            color: var(--gray-medium);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary-purple), var(--light-purple));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(106, 10, 173, 0.3);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .login-footer p {
+            color: var(--gray-dark);
+            margin: 10px 0;
+        }
+
+        .login-footer a {
+            color: var(--primary-pink);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .login-footer a:hover {
+            color: var(--primary-purple);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: var(--light-gray);
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            color: var(--gray-medium);
+            font-size: 0.9rem;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="login-section">
+        <div class="login-container">
+            <div class="login-header">
+                <img src="{% static 'images/Hairylove.png' %}" alt="Hairy Love">
+                <h1>💜 Bienvenido</h1>
+                <p>Inicia sesión para acceder a tu cuenta</p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="form-input-group">
+                    <label for="tipo"><i class="fas fa-user"></i> Tipo de Usuario</label>
+                    <select name="tipo" id="tipo" required>
+                        <option value="">-- Selecciona tu perfil --</option>
+                        <option value="Propietario">🏠 Propietario</option>
+                        <option value="Criador">❤️ Criador</option>
+                        <option value="Especialista">🏥 Especialista Veterinario</option>
+                    </select>
+                </div>
+
+                <div class="form-input-group">
+                    <label for="correo"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                    <input type="email" name="correo" id="correo" placeholder="tu@email.com" required>
+                </div>
+
+                <div class="form-input-group">
+                    <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
+                    <input type="password" name="password" id="password" placeholder="Tu contraseña" required>
+                </div>
+
+                <div style="text-align: right; margin-bottom: 20px;">
+                    <a href="{% url 'solicitar_reset_contrasena' %}" style="color: #e83e8c; font-size: 0.9rem; text-decoration: none;">
+                        <i class="fas fa-redo-alt" style="margin-right: 0.3rem;"></i>¿Olvidaste tu contraseña?
+                    </a>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>O</span>
+            </div>
+
+            <div class="login-footer">
+                <p>¿No tienes cuenta?</p>
+                <a href="{% url 'registro' %}">
+                    <i class="fas fa-user-plus"></i> Crear cuenta nueva
+                </a>
+                
+                <p style="margin-top: 20px; margin-bottom: 0;">
+                    <a href="{% url 'index' %}">
+                        <i class="fas fa-arrow-left"></i> Volver al inicio
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<div class="text-center mb-3">
+
+<a href="#" class="forgot">
+<i class="bi bi-question-circle"></i> ¿Olvidaste tu contraseña?
+</a>
+
+</div>
+
+</form>
+
+<hr class="pet-hr">
+
+<div class="text-center">
+
+<span>¿Nuevo en Hairy Love?</span>
+<br><br>
+
+<a href="{% url 'registro' %}" class="register-link">
+
+<i class="bi bi-person-plus-fill me-2"></i>Regístrate aquí
+
+</a>
+
+</div>
+
+</div>
+
+</body>
+</html>

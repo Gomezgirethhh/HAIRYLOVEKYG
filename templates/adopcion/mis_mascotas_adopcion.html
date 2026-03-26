@@ -1,0 +1,322 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mis Mascotas en Adopción - Hairy Love{% endblock %}
+
+{% block content %}
+<style>
+    .mis-mascotas-container {
+        max-width: 1200px;
+        margin: 80px auto 40px;
+        padding: 0 20px;
+    }
+    
+    .header-section {
+        text-align: center;
+        margin-bottom: 50px;
+        animation: fadeInDown 0.8s ease;
+    }
+    
+    .header-section h1 {
+        font-size: 2.5em;
+        color: #2c3;
+        margin-bottom: 15px;
+        font-weight: 800;
+    }
+    
+    .header-buttons {
+        margin-top: 20px;
+    }
+    
+    .btn-nuevo {
+        display: inline-block;
+        background: linear-gradient(135deg, #FF6B9D, #FF8FBC);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin: 0 10px;
+    }
+    
+    .btn-nuevo:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+    }
+    
+    .mascotas-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+        margin-bottom: 50px;
+    }
+    
+    .mascota-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        animation: slideInUp 0.6s ease;
+    }
+    
+    .mascota-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .mascota-header {
+        background: linear-gradient(135deg, #FF6B9D, #FF8FBC);
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .mascota-header h3 {
+        font-size: 1.5em;
+        margin: 0 0 10px;
+        font-weight: 800;
+    }
+    
+    .mascota-header p {
+        margin: 0;
+        font-size: 0.9em;
+        opacity: 0.9;
+    }
+    
+    .mascota-body {
+        padding: 20px;
+    }
+    
+    .estado-badge {
+        display: inline-block;
+        background: #d4edda;
+        color: #155724;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+    
+    .info-item {
+        margin-bottom: 12px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .info-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+    
+    .info-label {
+        color: #999;
+        font-size: 0.85em;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    
+    .info-value {
+        color: #333;
+        font-size: 1em;
+        font-weight: 500;
+        margin-top: 3px;
+    }
+    
+    .acciones {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 15px;
+    }
+    
+    .btn-accion {
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
+    
+    .btn-editar {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+    
+    .btn-editar:hover {
+        background: #1976d2;
+        color: white;
+    }
+    
+    .btn-eliminar {
+        background: #ffebee;
+        color: #c62828;
+    }
+    
+    .btn-eliminar:hover {
+        background: #c62828;
+        color: white;
+    }
+    
+    .sin-mascotas {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sin-mascotas h2 {
+        font-size: 2em;
+        color: #999;
+        margin-bottom: 15px;
+    }
+    
+    .sin-mascotas p {
+        color: #bbb;
+        font-size: 1.1em;
+        margin-bottom: 25px;
+    }
+    
+    .contador {
+        background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(255, 143, 188, 0.1));
+        border-left: 4px solid #FF6B9D;
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        color: #555;
+        font-weight: 600;
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .mascotas-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .acciones {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="mis-mascotas-container">
+    <div class="header-section">
+        <h1>🐾 Mis Mascotas en Adopción</h1>
+        <p>Gestiona las mascotas que has registrado para adopción</p>
+        <div class="header-buttons">
+            <a href="{% url 'registrar_mascota_adopcion' %}" class="btn-nuevo">
+                + Registrar Nueva Mascota
+            </a>
+        </div>
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}" style="margin-bottom: 25px;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    {% if mascotas %}
+        <div class="contador">
+            🐾 Tienes <strong>{{ mascotas|length }}</strong> mascota(s) registrada(s) en adopción
+        </div>
+        
+        <div class="mascotas-grid">
+            {% for mascota in mascotas %}
+                <div class="mascota-card">
+                    <div class="mascota-header">
+                        <h3>{{ mascota.Nombre_Mascota }}</h3>
+                        <p>{{ mascota.Especie }} • {{ mascota.Raza }}</p>
+                    </div>
+                    
+                    <div class="mascota-body">
+                        <div class="estado-badge">
+                            ✓ Disponible para Adopción
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label">Género</div>
+                            <div class="info-value">
+                                {% if mascota.Genero == 'Macho' %}🦁{% else %}🐱{% endif %}
+                                {{ mascota.Genero }}
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label">Tamaño</div>
+                            <div class="info-value">{{ mascota.Tamaño }}</div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label">Peso</div>
+                            <div class="info-value">{{ mascota.Peso }} kg</div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label">Estado de Salud</div>
+                            <div class="info-value">{{ mascota.Estado_Salud }}</div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label">Fecha de Registro</div>
+                            <div class="info-value">{{ mascota.fecha_creacion|date:"d/m/Y" }}</div>
+                        </div>
+                        
+                        <div class="acciones">
+                            <a href="{% url 'detalles_mascota' mascota.idMascota %}" class="btn-accion btn-editar">
+                                👀 Ver Detalles
+                            </a>
+                            <button class="btn-accion btn-eliminar" onclick="alert('Funcionalidad de eliminación próximamente')">
+                                🗑️ Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="sin-mascotas">
+            <h2>😿 No tienes mascotas registradas</h2>
+            <p>Aún no has registrado ninguna mascota en nuestro sistema de adopción.</p>
+            <a href="{% url 'registrar_mascota_adopcion' %}" class="btn-nuevo" style="margin: 0;">
+                + Registrar mi Primera Mascota
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

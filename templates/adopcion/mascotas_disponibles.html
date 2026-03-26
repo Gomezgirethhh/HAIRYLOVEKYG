@@ -1,0 +1,337 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mascotas Disponibles en Adopción - Hairy Love{% endblock %}
+
+{% block content %}
+<style>
+    .adopcion-container {
+        max-width: 1200px;
+        margin: 80px auto 40px;
+        padding: 0 20px;
+    }
+    
+    .adopcion-header {
+        text-align: center;
+        margin-bottom: 50px;
+        animation: fadeInDown 0.8s ease;
+    }
+    
+    .adopcion-header h1 {
+        font-size: 3em;
+        color: #2c3;
+        margin-bottom: 15px;
+        font-weight: 800;
+    }
+    
+    .adopcion-header p {
+        font-size: 1.1em;
+        color: #666;
+    }
+    
+    .filtros {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        animation: fadeInUp 0.8s ease;
+    }
+    
+    .filtros input,
+    .filtros select {
+        padding: 10px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 0.95em;
+        transition: all 0.3s ease;
+    }
+    
+    .filtros input:focus,
+    .filtros select:focus {
+        outline: none;
+        border-color: #FF6B9D;
+    }
+    
+    .btn-filtrar {
+        background: #FF6B9D;
+        color: white;
+        padding: 10px 25px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-filtrar:hover {
+        background: #FF8FBC;
+        transform: translateY(-2px);
+    }
+    
+    .mascotas-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+        margin-bottom: 50px;
+    }
+    
+    .mascota-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        animation: slideInUp 0.6s ease;
+        cursor: pointer;
+    }
+    
+    .mascota-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .mascota-imagen {
+        width: 100%;
+        height: 250px;
+        background: linear-gradient(135deg, #FFB6C1, #FF69B4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4em;
+        overflow: hidden;
+    }
+    
+    .mascota-imagen img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .mascota-info {
+        padding: 20px;
+    }
+    
+    .mascota-nombre {
+        font-size: 1.5em;
+        font-weight: 800;
+        color: #FF6B9D;
+        margin-bottom: 8px;
+    }
+    
+    .mascota-detalles {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 10px;
+    }
+    
+    .mascota-badge {
+        display: inline-block;
+        background: #FFE6F0;
+        color: #FF6B9D;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        margin-right: 5px;
+        margin-bottom: 10px;
+    }
+    
+    .mascota-descripcion {
+        color: #555;
+        font-size: 0.9em;
+        line-height: 1.4;
+        margin-bottom: 15px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .btn-ver-detalle {
+        display: inline-block;
+        background: linear-gradient(135deg, #FF6B9D, #FF8FBC);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .btn-ver-detalle:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+    }
+    
+    .sin-mascotas {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sin-mascotas h2 {
+        font-size: 2em;
+        color: #999;
+        margin-bottom: 15px;
+    }
+    
+    .sin-mascotas p {
+        color: #bbb;
+        font-size: 1.1em;
+    }
+    
+    .contador {
+        background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(255, 143, 188, 0.1));
+        border-left: 4px solid #FF6B9D;
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        color: #555;
+        font-weight: 600;
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .mascotas-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .filtros {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="adopcion-container">
+    <div class="adopcion-header">
+        <h1>🐾 Mascotas Disponibles en Adopción</h1>
+        <p>Encuentra tu compañero perfecto</p>
+        {% if user.is_authenticated and user.tipo == 'Criador' %}
+            <a href="{% url 'registrar_mascota_adopcion' %}" style="display: inline-block; margin-top: 20px; padding: 12px 30px; background: linear-gradient(135deg, #FF6B9D, #FF8FBC); color: white; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                + Registrar una mascota
+            </a>
+        {% endif %}
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}" style="margin-bottom: 25px;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    {% if total_mascotas > 0 %}
+        <div class="contador">
+            🐾 Se encontraron <strong>{{ total_mascotas }}</strong> mascota(s) disponible(s) para adopción
+        </div>
+        
+        <!-- FILTROS -->
+        <form method="GET" class="filtros">
+            <input type="text" name="especie" placeholder="Buscar por especie..." value="{{ request.GET.especie }}" style="grid-column: auto;">
+            <input type="text" name="tamaño" placeholder="Filtrar por tamaño..." value="{{ request.GET.tamaño }}" style="grid-column: auto;">
+            <select name="genero" style="grid-column: auto;">
+                <option value="">Filtrar por género...</option>
+                <option value="Macho" {% if request.GET.genero == 'Macho' %}selected{% endif %}>🦁 Macho</option>
+                <option value="Hembra" {% if request.GET.genero == 'Hembra' %}selected{% endif %}>🐱 Hembra</option>
+            </select>
+            <button type="submit" class="btn-filtrar" style="grid-column: auto;">🔍 Filtrar</button>
+            <a href="{% url 'mascotas_adopcion_disponibles' %}" style="padding: 10px 25px; display: flex; align-items: center; justify-content: center; background: #ddd; color: #333; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.background='#ccc'" onmouseout="this.style.background='#ddd'">🔄 Limpiar</a>
+        </form>
+        
+        <!-- MASCOTAS GRID -->
+        <div class="mascotas-grid">
+            {% for mascota in mascotas %}
+                <div class="mascota-card">
+                    <div class="mascota-imagen">
+                        {% if mascota.foto_mascota %}
+                            <img src="{{ mascota.foto_mascota.url }}" alt="{{ mascota.Nombre_Mascota }}">
+                        {% else %}
+                            {{ mascota.Especie|first|upper }}
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mascota-info">
+                        <div class="mascota-nombre">{{ mascota.Nombre_Mascota }}</div>
+                        
+                        <div class="mascota-detalles">
+                            <strong>{{ mascota.Especie }}</strong> • {{ mascota.Raza }}
+                        </div>
+                        
+                        <div>
+                            <span class="mascota-badge">
+                                {% if mascota.Genero == 'Macho' %}🦁{% else %}🐱{% endif %} {{ mascota.Genero }}
+                            </span>
+                            <span class="mascota-badge">{{ mascota.Tamaño }}</span>
+                        </div>
+                        
+                        <div class="mascota-descripcion">
+                            {% if mascota.Descripción_Física %}
+                                {{ mascota.Descripción_Física|truncatewords:15 }}
+                            {% else %}
+                                Una mascota especial esperando un hogar...
+                            {% endif %}
+                        </div>
+                        
+                        <a href="{% url 'detalles_mascota' mascota.idMascota %}" class="btn-ver-detalle">
+                            👀 Ver Detalles
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="sin-mascotas">
+            <h2>😿 No hay mascotas disponibles por el momento</h2>
+            <p>¡Vuelve pronto! Nuevas mascotas son agregadas constantemente.</p>
+            {% if user.is_authenticated and user.tipo == 'Criador' %}
+                <p style="margin-top: 25px;">
+                    <a href="{% url 'registrar_mascota_adopcion' %}" style="display: inline-block; padding: 12px 30px; background: linear-gradient(135deg, #FF6B9D, #FF8FBC); color: white; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                        + Registrar una mascota
+                    </a>
+                </p>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
